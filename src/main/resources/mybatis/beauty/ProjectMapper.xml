@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.ProjectDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.ProjectDo">
+        select id,
+               doctor_id,
+               type,
+               name,
+               content,
+               price,
+               agent_percent,
+               detail,
+               is_up,
+               create_time,
+               up_time
+        from beauty_project
+        where id = #{value}
+    </select>
+    <select id="getProjectDetail" resultType="map">
+        select p.id,
+               p.doctor_id     as doctorId,
+               p.type          as ptype,
+               p.name          as pname,
+               p.content       as pcontent,
+               p.price         as pprice,
+               p.agent_percent as agentPercent,
+               p.is_up         as isUp,
+               p.create_time   as createTime,
+               p.up_time       as upTime,
+               d.name          as dname,
+               d.head_img      as headImg,
+               d.post_name     as postName,
+               d.office_name   as officeName,
+               d.good_at       as goodAt,
+               d.detail
+        from beauty_project p
+                 left join beauty_doctor d on d.id = p.doctor_id
+        where p.id = #{value}
+    </select>
+    <select id="getListProject" resultType="map">
+        select
+        p.id,p.doctor_id as doctorId,p.type as ptype,p.name as pname,p.content as pcontent,
+        p.price as pprice,p.agent_percent as agentPercent,p.is_up as isUp,p.create_time as createTime,
+        p.up_time as upTime,d.name as dname,d.head_img as headImg
+        from beauty_project p left join beauty_doctor d on d.id = p.doctor_id
+        <where>
+            <if test="search != null and search != ''">and p.name LIKE '%${ search}%'</if>
+            <if test="type != null and type != ''">and p.type = #{type}</if>
+            <if test="isUp != null and isUp != ''">and p.is_up = #{isUp}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="list"
+            resultType="map">
+        select
+        p.id,p.doctor_id as doctorId,p.type as ptype,p.name as pname,p.content as pcontent,
+        p.price as pprice,p.agent_percent as agentPercent,p.detail as pdetail,p.is_up as isUp,p.create_time as
+        createTime,
+        p.up_time as upTime,d.name as dname,d.head_img as headImg
+        from beauty_project p left join beauty_doctor d on d.id = p.doctor_id
+        <where>
+            <if test="name != null and name != ''">and p.name LIKE '%${ name}%'</if>
+            <if test="dname != null and dname != ''">and d.name LIKE '%${ dname}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_project p left join beauty_doctor d on d.id = p.doctor_id
+        <where>
+            <if test="name != null and name != ''">and p.name LIKE '%${ name}%'</if>
+            <if test="dname != null and dname != ''">and d.name LIKE '%${ dname}%'</if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.ProjectDo">
+        update beauty_project
+        <set>
+            <if test="doctorId != null">doctor_id = #{doctorId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="agentPercent != null">agent_percent = #{agentPercent},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="isUp != null">is_up = #{isUp},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="upTime != null">up_time = #{upTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.ProjectDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_project
+        (doctor_id, type, name, content, price, agent_percent, detail, is_up, create_time)
+        values (#{doctorId},
+                #{type},
+                #{name},
+                #{content},
+                #{price},
+                #{agentPercent},
+                #{detail},
+                #{isUp},
+                #{createTime})
+    </insert>
+
+</mapper>

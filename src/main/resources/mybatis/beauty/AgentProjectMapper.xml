@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.AgentProjectDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.AgentProjectDo">
+        select id,
+               agent_id,
+               project_id,
+               status,
+               create_time,
+               check_time,
+               pay_time
+        from beauty_agent_project
+        where id = #{value}
+    </select>
+
+    <select id="getUnCheckProject" resultType="com.yuanzheng.beauty.domain.AgentProjectDo">
+        select id,
+               agent_id,
+               project_id,
+               status,
+               create_time,
+               check_time,
+               pay_time
+        from beauty_agent_project
+        where status = 0 limit 1
+    </select>
+    <select id="getAgentProject" resultType="com.yuanzheng.beauty.domain.AgentProjectDo">
+        select id,
+               agent_id,
+               project_id,
+               status,
+               create_time,
+               check_time,
+               pay_time
+        from beauty_agent_project
+        where agent_id = #{agentId}
+          and project_id = #{projectId}
+    </select>
+    <select id="getAgentProjectByPid" resultType="com.yuanzheng.beauty.domain.AgentProjectDo">
+        select id,
+               agent_id,
+               project_id,
+               status,
+               create_time,
+               check_time,
+               pay_time
+        from beauty_agent_project
+        where project_id = #{value} limit 1
+    </select>
+    <select id="getListMyProject" resultType="map">
+        select
+        ap.id,a.mobile,a.nick_name as nickName,p.name,p.content,p.price,p.agent_percent as
+        agentPercent,ap.status,ap.create_time as createTime
+        from
+        beauty_agent_project ap
+        left join beauty_agent a on a.id = ap.agent_id
+        left join beauty_project p on p.id = ap.project_id
+        <where>
+            <if test="agentId != null and agentId != ''">and ap.agent_id = #{agentId}</if>
+            <if test="status != null and status != ''">and ap.status = #{status}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by ap.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="list" resultType="map">
+        select
+        ap.id,a.mobile,a.nick_name as nickName,p.name,p.content,p.price,p.agent_percent as
+        agentPercent,ap.status,ap.create_time as createTime
+        from
+        beauty_agent_project ap
+        left join beauty_agent a on a.id = ap.agent_id
+        left join beauty_project p on p.id = ap.project_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+            <if test="name != null and name != ''">and p.name LIKE '%${ name}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by ap.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="getMyTotal" resultType="double">
+        SELECT ROUND(SUM(p.`price` * p.`agent_percent` / 100), 2)
+        FROM `beauty_agent_project` ap
+                 LEFT JOIN `beauty_project` p ON ap.`project_id` = p.`id`
+        WHERE ap.`agent_id` = #{value}
+          AND ap.`status` = 2
+    </select>
+
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from
+        beauty_agent_project ap
+        left join beauty_agent a on a.id = ap.agent_id
+        left join beauty_project p on p.id = ap.project_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+            <if test="name != null and name != ''">and p.name LIKE '%${ name}%'</if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.AgentProjectDo">
+        update beauty_agent_project
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="checkTime != null">check_time = #{checkTime},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.AgentProjectDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_agent_project
+        (agent_id, project_id, status, create_time)
+        values (#{agentId},
+                #{projectId},
+                #{status},
+                #{createTime})
+    </insert>
+</mapper>

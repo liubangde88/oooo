@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <base th:href="${path}">
+    <title>欢迎页</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/toastr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/fullcalendar.min.css}">
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tagsinput.css}">
+    <link rel="stylesheet" th:href="@{/css/jsdelivr.css}">
+    <link rel="stylesheet" th:href="@{/css/bts.css}">
+    <style>
+        .card-box > .form-group {
+            margin-bottom: 3rem !important;
+        }
+    </style>
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+<div id="app">
+    <div class="main-wrapper">
+        <div class="content">
+
+            <!--面包屑-->
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-4 col-3" style="margin-bottom: 2rem">
+                    <h4 class="page-title">添加代理信息</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-9">
+
+                    <!-- 错误消息-->
+                    <div class="card-box">
+                        <div class="alert alert-danger alert-dismissible  show" role="alert">
+                            <strong>
+                                <font style="vertical-align: inherit;">
+                                    <font style="vertical-align: inherit;">错误！</font>
+                                </font>
+                            </strong>
+                            <font style="vertical-align: inherit;">
+                                <font style="vertical-align: inherit;"> 提交您的数据时出现 </font>
+                            </font>
+                            <font style="vertical-align: inherit;">
+                                <font style="vertical-align: inherit;">。</font>
+                            </font>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="关闭">
+                    <span aria-hidden="true"><font style="vertical-align: inherit;"><font
+                            style="vertical-align: inherit;">×</font></font></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--数据表单-->
+                    <form class="card-box block" id="formAdd" action="#">
+                        <!--代理名称-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">代理名称: </label>
+                            <div class="col-lg-9">
+                                <input class="form-control form-control-lg" placeholder="如：一级代理" name="name"
+                                       type="text">
+                            </div>
+                        </div>
+
+                        <!--人数区间-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">人数区间:</label>
+                            <div class="col-lg-9">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input class="form-control form-control-lg" placeholder="如：1"
+                                               name="startnum"
+                                               type="text">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input class="form-control form-control-lg"
+                                               placeholder="如：2， 需大于第一个栏目填写的数值"
+                                               name="emdnum"
+                                               type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--分红比例-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">分红比例%: </label>
+                            <div class="col-lg-9">
+                                <input class="form-control form-control-lg"
+                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
+                                       name="dividends"
+                                       type="text">
+                            </div>
+                        </div>
+
+
+                        <!--优惠折扣-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">优惠折扣%: </label>
+                            <div class="col-lg-9">
+                                <input class="form-control form-control-lg"
+                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
+                                       name="product_offers"
+                                       type="text">
+                            </div>
+                        </div>
+
+
+                        <!--受保人数-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">受保人数</label>
+                            <div class="col-lg-9">
+                                <input class="form-control form-control-lg" name="people_insured" placeholder="输入数字"
+                                       type="text">
+                            </div>
+                        </div>
+
+
+                        <!--医保报销比例-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">医保报销比例%: </label>
+                            <div class="col-lg-9">
+                                <input class="form-control form-control-lg" name="mir"
+                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
+                                       type="text">
+                            </div>
+                        </div>
+
+
+                        <!--是否启用该代理层级-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">是否启用该代理层级</label>
+                            <div class="col-md-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="status" type="radio"
+                                           value="1">
+                                    <label class="form-check-label" for="gender_male">
+                                        是
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="status" type="radio" value="0">
+                                    <label class="form-check-label" for="gender_female">
+                                        否
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--是否设置为新注册用户初始代理层级-->
+                        <div class="form-group  row">
+                            <label class="col-md-3 col-form-label">是否设置为新注册用户初始代理层级</label>
+                            <div class="col-md-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="gender_male" name="default"
+                                           type="radio" value="1">
+                                    <label class="form-check-label" for="gender_male">
+                                        是
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" id="gender_female" name="default" type="radio"
+                                           value="0">
+                                    <label class="form-check-label" for="gender_female">
+                                        否
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--提交按钮-->
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="button" id="bs">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/js/common/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/vue.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/vue-router.js}" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $("#bs").click(function () {
+        var data = $('#formAdd').serializeArray()
+        var obj = {};//给obj分配内存
+        for (var i = 0; i < data.length; i++) {
+            obj[data [i].name] = data [i]['value'];
+
+        }
+        $.ajax({
+            type: "POST",//方法类型
+            url: "",//url
+            data: obj,
+            success: function (result) {
+                console.log(result)
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    })
+
+
+</script>
+</body>
+</html>

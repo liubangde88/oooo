@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.AgentDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.AgentDo">
+        select id,
+               up_agent,
+               agent_level,
+               nick_name,
+               head_img,
+               mobile,
+               login_pwd,
+               with_pwd,
+               with_type,
+               with_name,
+               with_man,
+               with_count,
+               with_address,
+               agent_status,
+               is_login,
+               cert_type,
+               cert_name,
+               cert_num,
+               create_time,
+               login_time
+        from beauty_agent
+        where id = #{value}
+    </select>
+
+    <select id="getByMobile" resultType="com.yuanzheng.beauty.domain.AgentDo">
+        select id,
+               up_agent,
+               agent_level,
+               nick_name,
+               head_img,
+               mobile,
+               login_pwd,
+               with_pwd,
+               with_type,
+               with_name,
+               with_man,
+               with_count,
+               with_address,
+               agent_status,
+               is_login,
+               cert_type,
+               cert_name,
+               cert_num,
+               create_time,
+               login_time
+        from beauty_agent
+        where mobile = #{value}
+    </select>
+    <select id="list"
+            resultType="com.yuanzheng.beauty.domain.AgentDo">
+        select
+        id,up_agent,agent_level,nick_name,head_img,mobile,login_pwd,with_pwd,with_type,with_name,with_man,with_count,with_address,agent_status,is_login,cert_type,cert_name,cert_num,create_time,login_time
+        from beauty_agent
+        <where>
+            <if test="mobile != null and mobile != ''">and mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and nick_name LIKE '%${ nickName}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_agent
+        <where>
+            <if test="mobile != null and mobile != ''">and mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and nick_name LIKE '%${ nickName}%'</if>
+        </where>
+    </select>
+
+
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select count(*) from beauty_agent
+    </select>
+
+
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.AgentDo">
+        update beauty_agent
+        <set>
+            <if test="agentLevel != null">agent_level = #{agentLevel},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="headImg != null">head_img = #{headImg},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="loginPwd != null">login_pwd = #{loginPwd},</if>
+            <if test="withPwd != null">with_pwd = #{withPwd},</if>
+            <if test="withType != null">with_type = #{withType},</if>
+            <if test="withName != null">with_name = #{withName},</if>
+            <if test="withMan != null">with_man = #{withMan},</if>
+            <if test="withCount != null">with_count = #{withCount},</if>
+            <if test="withAddress != null">with_address = #{withAddress},</if>
+            <if test="agentStatus != null">agent_status = #{agentStatus},</if>
+            <if test="isLogin != null">is_login = #{isLogin},</if>
+            <if test="certType != null">cert_type = #{certType},</if>
+            <if test="certName != null">cert_name = #{certName},</if>
+            <if test="certNum != null">cert_num = #{certNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="loginTime != null">login_time = #{loginTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.AgentDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_agent
+        (up_agent, agent_level, nick_name, head_img, mobile, login_pwd, with_pwd, with_type, with_name, with_count,
+         with_address, agent_status, create_time, login_time)
+        values (#{upAgent},
+                #{agentLevel},
+                #{nickName},
+                #{headImg},
+                #{mobile},
+                #{loginPwd},
+                #{withPwd},
+                #{withType},
+                #{withName},
+                #{withCount},
+                #{withAddress},
+                #{agentStatus},
+                #{createTime},
+                #{loginTime})
+    </insert>
+</mapper>

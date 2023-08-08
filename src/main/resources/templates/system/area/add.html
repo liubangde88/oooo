@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="pid" name="pid" th:value="${pid}" type="hidden"/>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">区划代码：</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="id" name="id" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">区划名称：</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="name" name="name" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">区划排序：</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="sort" name="sort" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">区划等级：</label>
+                            <div class="col-sm-8">
+                                <select class="form-control chosen-select required" data-placeholder="--区划等级--" id="level" lay-filter="level"
+                                        lay-verify="level"
+                                        name="level" required tabindex="2">
+                                    <option value="1">省级</option>
+                                    <option value="2">市级</option>
+                                    <option value="3">区级</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:src="@{/js/appjs/sys/area/add.js}" type="text/javascript">
+</script>
+</body>
+</html>

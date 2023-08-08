@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <base th:href="${path}">
+    <title>欢迎页</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/toastr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style_1.css}">
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/fullcalendar.min.css}">
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tagsinput.css}">
+
+
+</head>
+<body style="margin: 0px; padding: 0px;">
+<div class="page-wrapper" style="min-height: 418px;" id="app">
+    <div class="content">
+
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg1"><i class="fa fa-stethoscope" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 v-html="doctorCount"></h3>
+                        <span class="widget-title1">医生统计 <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 v-html="agentCount"></h3>
+                        <span class="widget-title2">会员统计 <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 v-html="readyCount"></h3>
+                        <span class="widget-title3">待审核预约 <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <div class="dash-widget">
+                    <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                    <div class="dash-widget-info text-right">
+                        <h3 v-html="withCount"></h3>
+                        <span class="widget-title4">待审核提现 <i class="fa fa-check" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/common/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/vue.min.js}" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $.ajax({
+        url: "",
+        type: "post",
+        success: function (r) {
+            const data = r.data
+            var vm = new Vue({
+                el: '#app',
+                data: data
+            })
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.EmailLogDao">
+
+    <select id="getLatest" resultType="com.yuanzheng.beauty.domain.EmailLogDo">
+        select *
+        from beauty_eamil_log
+        where email = #{value}
+        order by send_time desc limit 1
+    </select>
+
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.EmailLogDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_eamil_log
+        (email, random_code, send_time)
+        values (#{email},
+                #{randomCode},
+                #{sendTime})
+    </insert>
+</mapper>

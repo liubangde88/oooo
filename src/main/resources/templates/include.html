@@ -1,0 +1,85 @@
+<head th:fragment="header">
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title></title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link rel="shortcut icon" th:href="@{favicon.ico}">
+    <!-- <link href="css/bootstrap.min.css?v=3.3.7"
+          th:href="@{/css/bootstrap.min.css?v=3.3.7}" rel="stylesheet"> -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}"/>
+    <!--  <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/> -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css?v=4.4.0}"/>
+    <!-- <link href="/css/plugins/bootstrap-table/bootstrap-table.min.css"
+          th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/> -->
+    <link rel="stylesheet" th:href="@{/css/plugins/jsTree/style.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/jqTreeGrid/jquery.treegrid.css}"/>
+    <!--summernote css -->
+    <link rel="stylesheet" th:href="@{/css/plugins/summernote/summernote-0.8.8.css}"/>
+    <link rel="stylesheet" th:href="@{/css/animate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plugins/chosen/chosen.css}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css?v=4.1.0}"/>
+    <!-- 日期选择 css -->
+    <!--<link rel="stylesheet" th:href="@{/js/plugins/layer/laydate/skins/default/laydate.css}" />-->
+    <link rel="stylesheet" th:href="@{/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/js/plugins/layDate/laydate/theme/default/laydate.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.min.css}"/>
+</head>
+
+
+<div th:fragment="footer">
+    <script th:src="@{/js/common/jquery.min.js?v=2.1.4}"></script>
+    <script th:src="@{/js/common/bootstrap.min.js?v=3.3.7}"></script>
+    <script th:src="@{/js/common/bootstrap-table.js}"></script>
+    <script th:src="@{/js/common/bootstrap-table-zh-CN.js}"></script>
+    <script th:src="@{/js/common/bootstrap-table-export.js}"></script>
+    <script th:src="@{/js/common/tableExport.min.js}"></script>
+    <script th:src="@{/js/common/bootstrap-select.min.js}" type="text/javascript"></script>
+    <!-- <script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script> -->
+    <script th:src="@{/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+    <script th:src="@{/js/plugins/jsTree/jstree.min.js}"></script>
+    <script th:src="@{/js/plugins/jqTreeGrid/jquery.treegrid.min.js}"></script>
+    <script th:src="@{/js/plugins/jqTreeGrid/jquery.treegrid.extension.js}"></script>
+    <script th:src="@{/js/plugins/jqTreeGrid/jquery.treegrid.bootstrap3.js}"></script>
+    <script th:src="@{/js/plugins/chosen/chosen.jquery.js}"></script>
+    <script th:src="@{/js/plugins/layer/layer.js}"></script>
+    <script th:src="@{/js/plugins/layui/layui.js}"></script>
+    <script th:src="@{/js/common/content.js?v=1.0.0}"></script>
+    <script th:src="@{/js/common/bootstrap-paginator.min.js}"></script>
+    <!--<script th:src="@{/js/plugins/layer/laydate/laydate.js}" ></script>-->
+
+    <script th:src="@{/js/plugins/layDate/laydate/laydate.js}"></script>
+
+    <!--summernote-->
+    <script th:src="@{/js/plugins/summernote/summernote.js}"></script>
+    <script th:src="@{/js/plugins/summernote/summernote-zh-CN.min.js}"></script>
+    <script th:src="@{/js/common/ajax-util.js}"></script>
+    <!-- 扩展的公共js -->
+    <script th:src="@{/js/utils/common.js}"></script>
+    <script th:src="@{/js/utils/sys_common.js}"></script>
+    <script th:src="@{/js/utils/DateUtil.js}"></script>
+    <script th:src="@{/js/utils/serialize-utils.js}"></script>
+    <!-- <script src="/js/utils/validate-utils.js"></script> -->
+
+    <script th:inline="javascript"> var projectName = [[@{/}]] ; </script>
+    <script type="text/javascript">
+        //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+        var curWwwPath = window.document.location.href;
+        //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+        var pathName = window.document.location.pathname;
+        var pos = curWwwPath.indexOf(pathName);
+
+        //获取主机地址，如： http://localhost:8083
+        var urlHost = curWwwPath.substring(0, pos);
+        //获取带"/"的项目名，如：/uimcardprj
+        //var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+        var ctx = urlHost + projectName;
+    </script>
+</div>

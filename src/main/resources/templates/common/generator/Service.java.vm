@@ -1,0 +1,41 @@
+package ${package}.service;
+
+import ${package}.domain.${className}DO;
+
+import java.util.List;
+import java.util.Map;
+
+import com.yuanzheng.common.domain.PageDO;
+import com.yuanzheng.common.utils.Query;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Service {
+
+        ${className}DO get(${pk.attrType} ${pk.attrname});
+
+    PageDO<${className}DO> queryList(Query query);
+
+    List<${className}DO> list(Map<String, Object> map);
+
+    List<${className}DO> fuzzyQueryList(Map<String, Object> map);
+
+
+    List<Map<String, Object>> findDatas(Map<String, Object> map);
+
+    int save(${className}DO ${classname});
+
+    int update(${className}DO ${classname});
+
+    int remove(${pk.attrType} ${pk.attrname});
+
+    int batchRemove(${pk.attrType}[] ${pk.attrname}s);
+
+    int count(Map<String, Object> map);
+
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12" id="formSearch" name="formSearch">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="form-group col-sm-4">
+                    <label class="col-sm-2 control-label" style="margin-top: 6px;">昵称</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="nickName" placeholder="昵称"
+                               type="text">
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label class="col-sm-2 control-label" style="margin-top: 6px;">邮箱</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" id="mobile" placeholder="邮箱"
+                               type="text">
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <button class="btn btn-success" id="btnSearch" onclick="reLoad()">查询</button>
+                    <button class="btn btn-danger" id="btnReset" onclick="reSet()">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-table-toolbar">
+        <div class="pull-left" id="exampleToolbar">
+        </div>
+    </div>
+    <table data-mobile-responsive="true" id="dataTable">
+        <thead>
+        <tr>
+            <th data-checkbox="true"></th>
+            <th data-align='center' data-field="id" data-sortable="true"></th>
+            <th data-align='center' data-field="nickName" data-sortable="true">昵称</th>
+            <th data-align='center' data-field="mobile" data-sortable="true">邮箱</th>
+            <th data-align='center' data-field="type" data-formatter="typeFormatter" data-sortable="true">动作</th>
+            <th data-align='center' data-field="money" data-sortable="true">金额</th>
+            <th data-align='center' data-field="fsupMoney" data-sortable="true">操作前余额</th>
+            <th data-align='center' data-field="bsupMoney" data-sortable="true">操作后余额</th>
+            <th data-align='center' data-field="createTime" data-sortable="true">操作时间</th>
+            <th data-align='center' data-events="operateEvent" data-field="operate" data-formatter="operateFormatter">
+                操作
+            </th>
+        </tr>
+        </thead>
+    </table>
+
+</div>
+<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<div>
+    <div>
+        <script type="text/javascript">
+            var s_edit_h = 'hidden';
+        </script>
+    </div>
+    <div shiro:hasPermission="beauty:wallet:edit">
+        <script type="text/javascript">
+            s_edit_h = '';
+        </script>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/js/appjs/beauty/wallet/charge.js}" type="text/javascript"></script>
+</body>
+</html>

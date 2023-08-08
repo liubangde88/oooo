@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.system.dao.DeptTreeDao">
+
+    <insert id="save" parameterType="com.yuanzheng.system.domain.DeptTreeDO" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_dept_tree
+        (
+        dept_id,
+        parent_id,
+        create_time
+        )
+        values
+        (
+        #{deptId},
+        #{parentId},
+        #{createTime, jdbcType=TIMESTAMP}                                                                        <!--原本
+                     sys_seq('                      -->
+        )
+    </insert>
+
+    <delete id="remove">
+        delete
+        from sys_dept_tree
+        where dept_id = #{value}
+    </delete>
+</mapper>

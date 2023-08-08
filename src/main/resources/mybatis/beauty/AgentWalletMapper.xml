@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.AgentWalletDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.AgentWalletDo">
+        select id,
+               agent_id,
+               sup_money,
+               with_money,
+               freeze_money,
+               create_time,
+               update_time
+        from beauty_agent_wallet
+        where id = #{value}
+    </select>
+    <select id="getWallet" resultType="com.yuanzheng.beauty.domain.AgentWalletDo">
+        select id,
+               agent_id,
+               sup_money,
+               with_money,
+               freeze_money,
+               create_time,
+               update_time
+        from beauty_agent_wallet
+        where agent_id = #{value}
+    </select>
+    <select id="getListWithdraw" resultType="com.yuanzheng.beauty.domain.AgentWalletDo">
+        select
+        id,agent_id,sup_money,with_money,freeze_money,create_time,update_time
+        from beauty_agent_wallet
+        <where>
+            <if test="agentId != null and agentId != ''">AND agent_id = #{agentId}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+    <select id="list"
+            resultType="map">
+        select
+        b.id,a.nick_name as nickName,a.mobile,
+        b.sup_money as supMoney,b.with_money as withMoney,
+        b.freeze_money as freezeMoney
+        from beauty_agent a left join beauty_agent_wallet b on a.id = b.agent_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_agent
+        <where>
+            <if test="mobile != null and mobile != ''">and mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and nick_name LIKE '%${ nickName}%'</if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.AgentWalletDo">
+        update beauty_agent_wallet
+        <set>
+            <if test="supMoney != null">sup_money = #{supMoney},</if>
+            <if test="withMoney != null">with_money = #{withMoney},</if>
+            <if test="freezeMoney != null">freeze_money = #{freezeMoney},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.AgentWalletDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_agent_wallet
+        (agent_id, sup_money, with_money, freeze_money, create_time, update_time)
+        values (#{agentId},
+                #{supMoney},
+                #{withMoney},
+                #{freezeMoney},
+                #{createTime},
+                #{updateTime})
+    </insert>
+</mapper>

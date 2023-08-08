@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+
+    <div class="fixed-table-toolbar">
+        <div class="pull-left" id="exampleToolbar">
+            <button class="btn btn-primary" id="btnAdd"
+                    onclick="add()" shiro:hasPermission="beauty:qrcode:add" type="button">
+                <i aria-hidden="true" class="fa fa-plus"></i>添加
+            </button>
+        </div>
+    </div>
+    <table data-mobile-responsive="true" id="dataTable">
+        <thead>
+        <tr>
+            <th data-checkbox="true"></th>
+            <th data-align='center' data-field="id" data-sortable="true"></th>
+            <th data-align='center' data-field="qrName" data-sortable="true">名称</th>
+            <th data-align='center' data-field="qrAccount" data-sortable="true">账号</th>
+            <th data-align='center' data-field="qrAddress" data-sortable="true">地址</th>
+            <th data-align='center' data-field="qrUrl" data-formatter="photoUrlFormatter" data-sortable="true">二维码
+            </th>
+            <th data-align='center' data-field="createTime" data-sortable="true">创建时间</th>
+            <th data-align='center' data-events="operateEvent" data-field="operate" data-formatter="operateFormatter">
+                操作
+            </th>
+        </tr>
+        </thead>
+    </table>
+
+</div>
+<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<div>
+    <div>
+        <script type="text/javascript">
+            var s_edit_h = 'hidden';
+            var s_remove_h = 'hidden';
+        </script>
+    </div>
+    <div shiro:hasPermission="beauty:qrcode:edit">
+        <script type="text/javascript">
+            s_edit_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="beauty:qrcode:remove">
+        <script type="text/javascript">
+            s_remove_h = '';
+        </script>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/js/appjs/beauty/qrcode/qrcode.js}" type="text/javascript"></script>
+</body>
+</html>

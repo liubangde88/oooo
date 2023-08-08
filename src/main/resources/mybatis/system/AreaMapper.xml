@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.system.dao.AreaDao">
+    <!--精确查找-->
+    <sql id="common_certain_condition">
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="pid != null and pid != ''">AND pid = #{pid}</if>
+            <if test="provinceCode != null and provinceCode != ''">AND province_code = #{provinceCode}</if>
+            <if test="cityCode != null and cityCode != ''">AND city_code = #{cityCode}</if>
+            <if test="areaCode != null and areaCode != ''">AND area_code = #{areaCode}</if>
+            <if test="streetCode != null and streetCode != ''">AND street_code = #{streetCode}</if>
+            <if test="committeeCode != null and committeeCode != ''">AND committee_code = #{committeeCode}</if>
+            <if test="committeeType != null and committeeType != ''">AND committee_type = #{committeeType}</if>
+        </where>
+    </sql>
+
+    <!--精确模糊查询-->
+    <sql id="common_fuzzy_condition">
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name LIKE '%${ name}%'</if>
+            <if test="pid != null and pid != ''">AND pid = #{pid}</if>
+            <if test="provinceCode != null and provinceCode != ''">AND province_code = #{provinceCode}</if>
+            <if test="cityCode != null and cityCode != ''">AND city_code = #{cityCode}</if>
+            <if test="areaCode != null and areaCode != ''">AND area_code = #{areaCode}</if>
+            <if test="streetCode != null and streetCode != ''">AND street_code = #{streetCode}</if>
+            <if test="committeeCode != null and committeeCode != ''">AND committee_code = #{committeeCode}</if>
+            <if test="committeeType != null and committeeType != ''">AND committee_type = #{committeeType}</if>
+        </where>
+    </sql>
+
+
+    <select id="get" resultType="com.yuanzheng.system.domain.AreaDO">
+        SELECT id,
+               name,
+               pid,
+               province_code,
+               city_code,
+               area_code,
+               street_code,
+               committee_code,
+               committee_type,
+               sort,
+               level
+        FROM sys_area
+        where id = #{value}
+    </select>
+
+
+    <select id="list" resultType="com.yuanzheng.system.domain.AreaDO">
+        SELECT
+        id, name, pid, province_code, city_code, area_code, street_code, committee_code, committee_type, sort, level
+        FROM sys_area
+        <include refid="common_certain_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY id ASC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+
+    </select>
+
+    <select id="fuzzyQueryList" resultType="com.yuanzheng.system.domain.AreaDO">
+        SELECT
+        id, name, pid, province_code, city_code, area_code, street_code, committee_code, committee_type, sort, level
+        FROM sys_area
+        <include refid="common_fuzzy_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from sys_area
+        <include refid="common_certain_condition"></include>
+    </select>
+
+    <select id="getAreaByPid" resultType="com.yuanzheng.system.domain.AreaDO">
+        select *
+        from sys_area
+        where pid = #{value}
+    </select>
+    <select id="fuzzyQueryCount" resultType="int">
+        select count(*) from sys_area
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <select id="findDatas" resultType="Map">
+        select * from sys_area
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <insert id="save" parameterType="com.yuanzheng.system.domain.AreaDO">
+        insert into sys_area
+        (id,
+         name,
+         pid,
+         sort,
+         level)
+        values (#{id, jdbcType=BIGINT},
+                #{name, jdbcType=VARCHAR},
+                #{pid, jdbcType=BIGINT},
+                #{sort, jdbcType=INTEGER},
+                #{level, jdbcType=INTEGER})
+    </insert>
+
+
+    <update id="update" parameterType="com.yuanzheng.system.domain.AreaDO">
+        update sys_area
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="level != null">level = #{level}</if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 修改之后-->
+    <update id="remove">
+        delete
+        from sys_area
+        where id = #{value}
+    </update>
+
+    <update id="batchRemove">
+        update sys_area set is_del=1 where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </update>
+
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.AgentWithDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.AgentWithDo">
+        select id,
+               agent_id,
+               with_type,
+               with_name,
+               with_man,
+               with_count,
+               with_money,
+               sup_money,
+               with_status,
+               create_time,
+               with_time
+        from beauty_agent_with
+        where id = #{value}
+    </select>
+
+    <select id="getUnCheckWith" resultType="com.yuanzheng.beauty.domain.AgentWithDo">
+        select id,
+               agent_id,
+               with_type,
+               with_name,
+               with_man,
+               with_count,
+               with_money,
+               sup_money,
+               with_status,
+               create_time,
+               with_time
+        from beauty_agent_with
+        where with_status = 0 limit 1
+    </select>
+    <select id="getListWithdraw" resultType="com.yuanzheng.beauty.domain.AgentWithDo">
+        select
+        id,agent_id,with_type,with_name,with_man,with_count,with_money,sup_money,with_status,create_time,with_time
+        from beauty_agent_with
+        <where>
+            <if test="agentId != null and agentId != ''">and agent_id = #{agentId}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="list"
+            resultType="map">
+        select
+        a.nick_name as nickName,a.mobile,
+        w.id,w.agent_id as agentId,w.with_type as withType,w.with_name as withName,w.with_man as withMan,
+        w.with_count as withCount,w.with_money as withMoney,w.sup_money as supMoney,
+        w.with_status as withStatus,w.create_time as createTime,w.with_time as withTime
+        from beauty_agent_with w left join beauty_agent a on a.id = w.agent_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_agent_with w left join beauty_agent a on a.id = w.agent_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.AgentWithDo">
+        update beauty_agent_with
+        <set>
+            <if test="agentId != null">agent_id = #{agentId},</if>
+            <if test="withType != null">with_type = #{withType},</if>
+            <if test="withName != null">with_name = #{withName},</if>
+            <if test="withMan != null">with_man = #{withMan},</if>
+            <if test="withCount != null">with_count = #{withCount},</if>
+            <if test="withMoney != null">with_money = #{withMoney},</if>
+            <if test="supMoney != null">sup_money = #{supMoney},</if>
+            <if test="withStatus != null">with_status = #{withStatus},</if>
+            <if test="withTime != null">with_time = #{withTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.AgentWithDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_agent_with
+        (agent_id, with_type, with_name, with_man, with_count, with_money, sup_money, with_status, create_time)
+        values (#{agentId},
+                #{withType},
+                #{withName},
+                #{withMan},
+                #{withCount},
+                #{withMoney},
+                #{supMoney},
+                #{withStatus},
+                #{createTime})
+    </insert>
+
+</mapper>

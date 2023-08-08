@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.ProjectPhotoDao">
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_project_photo
+        <where>
+            <if test="projectId != null and projectId != ''">and project_id = #{projectId}</if>
+        </where>
+    </select>
+    <select id="getProjectPhoto" resultType="com.yuanzheng.beauty.domain.ProjectPhotoDo">
+        select id,
+               project_id,
+               photo_url,
+               create_time
+        from beauty_project_photo
+        where project_id = #{value}
+    </select>
+    <select id="list"
+            resultType="com.yuanzheng.beauty.domain.ProjectPhotoDo">
+        select
+        id,project_id,photo_url,create_time
+        from beauty_project_photo
+        <where>
+            <if test="projectId != null and projectId != ''">and project_id = #{projectId}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id asc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.ProjectPhotoDo"
+            useGeneratedKeys="true" keyProperty="id">
+
+        insert into beauty_project_photo
+        (project_id, photo_url, create_time)
+        values (#{projectId},
+                #{photoUrl},
+                #{createTime})
+    </insert>
+    <delete id="remove">
+        delete
+        from beauty_project_photo
+        where id = #{value}
+    </delete>
+</mapper>

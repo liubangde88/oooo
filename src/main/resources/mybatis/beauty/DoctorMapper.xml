@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.DoctorDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.DoctorDo">
+        select id,
+               head_img,
+               name,
+               post_name,
+               office_name,
+               good_at,
+               detail,
+               create_time,
+               update_time
+        from beauty_doctor
+        where id = #{value}
+    </select>
+    <select id="listAll" resultType="com.yuanzheng.beauty.domain.DoctorDo">
+        select id,
+               head_img,
+               name,
+               post_name,
+               office_name,
+               good_at,
+               detail,
+               create_time,
+               update_time
+        from beauty_doctor
+    </select>
+    <select id="list"
+            resultType="com.yuanzheng.beauty.domain.DoctorDo">
+        select
+        id,head_img,name,post_name,office_name,good_at,detail,create_time,update_time
+        from beauty_doctor
+        <where>
+            <if test="name != null and name != ''">and name LIKE '%${ name}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_doctor
+        <where>
+            <if test="name != null and name != ''">and name LIKE '%${ name}%'</if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.yuanzheng.beauty.domain.DoctorDo">
+        update beauty_doctor
+        <set>
+            <if test="headImg != null">head_img = #{headImg},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="postName != null">post_name = #{postName},</if>
+            <if test="officeName != null">office_name = #{officeName},</if>
+            <if test="goodAt != null">good_at = #{goodAt},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.DoctorDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_doctor
+        (head_img, name, post_name, office_name, good_at, detail, create_time)
+        values (#{headImg},
+                #{name},
+                #{postName},
+                #{officeName},
+                #{goodAt},
+                #{detail},
+                #{createTime})
+    </insert>
+</mapper>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="webkit" name="renderer">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <title>香港雅太医疗美容医院</title>
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/toastr.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{/css/plugins/toastr/fullcalendar.min.css}">
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tagsinput.css}">
+
+    <style>
+        .dropdown-toggle.count-info{
+            color: #fff9ec !important;
+        }
+    </style>
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg"
+      style="overflow: hidden">
+<div id="wrapper">
+
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation" style="background: #86784B;">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div style="background: #86784B">
+                        <span><img alt="image" class="img-responsive text-center" style="margin-left: 35%;" height="60"
+                                   th:src="@{${picUrl}}" width="60"/></span>
+                    </div>
+                    <div class="dropdown profile-element hidden">
+
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="clear">
+                            <span class="block m-t-xs"><strong class="font-bold"
+                                                               th:text="${username}">admin</strong></span>
+                            <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                             </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a @click="personal" href="#">修改头像</a>
+                            </li>
+                            <li><a @click="personal" href="#">个人资料</a>
+                            </li>
+                            <li><a @click="personal" href="#">密码修改</a>
+                            </li>
+                            <li><a @click="personal" href="#">信箱</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a th:href="@{/logout}">安全退出</a>
+                            </li>
+                        </ul>
+                        <div class="logo-element">BootDo</div>
+                    </div>
+                </li>
+                <li th:each="menu : ${menus}"><a href="#"> <i
+                        class="fa fa fa-bar-chart-o" th:class="${menu.attributes.icon}"></i>
+                    <span class="nav-label" th:text="${menu.text}">基础信息</span> <span
+                            class="fa arrow"></span>
+                </a>
+                    <ul class="nav nav-second-level">
+                        <li th:each="cmenu : ${menu.children}">
+                            <a class="J_menuItem" href="graph_echarts.html"
+                               th:href="@{${cmenu.attributes.url}}"
+                               th:text="${cmenu.text}">系统管理</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div class="gray-bg dashbard-1" id="page-wrapper">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation"
+                 style="margin-bottom: 0; background: #86784B">
+                <div class="navbar-header">
+
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-default "
+                       href="#" title="收起菜单"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown"><a class="dropdown-toggle count-info"
+                                            data-toggle="dropdown" href="#"> <i class="fa fa-envelope"></i>
+                        <span class="label label-warning">{{total}}</span>通知
+                    </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li class="m-t-xs" v-for="row in rows">
+                                <div class="dropdown-messages-box">
+                                    <a class="pull-left"> <i
+                                            class="fa fa-server"></i>
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">{{row.before}}</small>
+                                        <strong>{{row.sender}}</strong>
+                                        {{row.title}} <br>
+                                        <small class="text-muted">{{row.updateDate}}</small>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                            </li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a class="J_menuItem" th:href="@{/oa/notify/selfNotify}"> <i
+                                            class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="hidden-xs" style="color: #fff !important;"><a @click="personal" href="#"><i class="fa fa-id-card"></i> 个人</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left J_tabLeft">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs J_menuTabs">
+                <div class="page-tabs-content">
+                    <a class="active J_menuTab" data-id="index_v1.html"
+                       href="javascript:;">首页</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right J_tabRight">
+                <i class="fa fa-forward"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">
+                    关闭操作<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li class="J_tabShowActive"><a>定位当前选项卡</a></li>
+                    <li class="divider"></li>
+                    <li class="J_tabCloseAll"><a>关闭全部选项卡</a></li>
+                    <li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
+                </ul>
+            </div>
+            <a class="roll-nav roll-right J_tabExit" th:href="@{/logout}"><i
+                    class="fa fa fa-sign-out"></i> 退出</a>
+        </div>
+        <div class="row J_mainContent" id="content-main">
+            <!-- 用户tab页签间传值用 -->
+            <form id="mainForm" method="post">
+                <input id="indexMainInput" name="indexMainInput" type="hidden" value="{}"/>
+                <input id="diagIsSubmit" name="diagIsSubmit" type="hidden"/>
+            </form>
+
+            <iframe class="J_iframe" data-id="index_v1.html" frameborder="0" height="100%"
+                    name="iframe0" seamless src="" th:src="@{/main}"
+                    width="100%"></iframe>
+        </div>
+        <div class="footer">
+            <div class="pull-right"></div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript"> var projectName = [[@{/}]] ; </script>
+<script type="text/javascript">
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath = window.document.location.href;
+    var pathName = window.document.location.pathname;
+    var pos = curWwwPath.indexOf(pathName);
+
+    //获取主机地址，如： http://localhost:8083
+    var urlHost = curWwwPath.substring(0, pos);
+    var ctx = urlHost + projectName;
+</script>
+<!-- 全局js -->
+<script th:src="@{/js/common/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/js/common/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<!-- 自定义js -->
+<script th:src="@{/js/common/app.js?v=4.1.0}"></script>
+<script th:src="@{/js/common/contabs.js}" type="text/javascript"></script>
+<!-- 第三方插件 -->
+<script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+
+<!-- vue -->
+<script th:src="@{/js/common/vue.min.js}" type="text/javascript">
+
+</script>
+<script th:src="@{/js/plugins/toastr/toastr.min.js}"></script>
+<script type="text/javascript">
+    var stompClient = null;
+    $(function () {
+        var mp3Url = "http://13.214.13.197/f-18-9-6-21.mp3";
+        var player = new Audio(mp3Url);
+        setInterval(function () {
+            $.ajax({
+                url: ctx + "/beauty/agent/project/check",
+                type: "post",
+                success: function (r) {
+                    if (r.code == 0) {
+                        player.play(); //播放 mp3这个音频对象
+                    } else {
+                    }
+                }
+            });
+
+        }, 60000);
+    });
+
+
+    var wrapper = new Vue({
+        el: '#wrapper',
+        data: {
+            total: '',
+            rows: '',
+        },
+        methods: {
+            personal: function () {
+                layer.open({
+                    type: 2,
+                    title: '个人设置',
+                    maxmin: true,
+                    shadeClose: false,
+                    area: ['800px', '600px'],
+                    content: ctx + '/sys/user/personal'
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

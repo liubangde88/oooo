@@ -1,0 +1,77 @@
+package ${package}.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+import ${package}.dao.${className}Dao;
+import ${package}.domain.${className}DO;
+import ${package}.service.${className}Service;
+import com.yuanzheng.common.utils.Query;
+import com.yuanzheng.common.domain.PageDO;
+
+@Service
+public class ${className}ServiceImpl implements ${className}Service {
+    @Autowired
+    private ${className}Dao ${classname}Dao;
+
+    @Override
+    public ${className}DO get(${pk.attrType} ${pk.attrname}) {
+        return ${classname}Dao.get(${pk.attrname});
+    }
+
+    @Override
+    public PageDO<${className}DO> queryList(Query query) {
+        int total = ${classname}Dao.fuzzyQueryCount(query);
+        List<${className}DO> ls = ${classname}Dao.fuzzyQueryList(query);
+        PageDO<${className}DO> page = new PageDO<>();
+        page.setTotal(total);
+        page.setRows(ls);
+        return page;
+    }
+
+    @Override
+    public List<${className}DO> list(Map<String, Object> map) {
+        return ${classname}Dao.list(map);
+    }
+
+    @Override
+    public List<${className}DO> fuzzyQueryList(Map<String, Object> map) {
+        return ${classname}Dao.fuzzyQueryList(map);
+    }
+
+
+    @Override
+    public List<Map<String, Object>> findDatas(Map<String, Object> map) {
+        List<Map<String, Object>> list = ${classname}Dao.findDatas(map);
+        return list;
+    }
+
+    @Override
+    public int save(${className}DO ${classname}) {
+        return ${classname}Dao.save(${classname});
+    }
+
+    @Override
+    public int update(${className}DO ${classname}) {
+        return ${classname}Dao.update(${classname});
+    }
+
+    @Override
+    public int remove(${pk.attrType} ${pk.attrname}) {
+        return ${classname}Dao.remove(${pk.attrname});
+    }
+
+    @Override
+    public int batchRemove(${pk.attrType}[] ${pk.attrname}s) {
+        return ${classname}Dao.batchRemove(${pk.attrname}s);
+    }
+
+    @Override
+    public int count(Map<String, Object> map) {
+        return ${classname}Dao.count(map);
+    }
+
+}

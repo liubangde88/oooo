@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${package}.dao.${className}Dao">
+    <!--精确查找-->
+    <sql id="common_certain_condition">
+        <where>
+            #foreach($column in $columns)
+                <if test="$column.attrname != null and $column.attrname.trim() != ''">AND $column.columnName =
+                    #{$column.attrname}
+                </if>
+            #end
+        </where>
+    </sql>
+
+    <!--精确模糊查询-->
+    <sql id="common_fuzzy_condition">
+        <where>
+            #foreach($column in $columns)
+                <if test="$column.attrname != null and $column.attrname.trim() != ''">#if(${column.dataType} ==
+                    "varchar" || ${column.dataType} =="varchar2" || ${column.dataType} ==
+                    "nvarchar2" || ${column.dataType} =="datetime") AND $column.columnName LIKE '%${ $column.attrname
+                    }%' #else AND $column.columnName = #{$column.attrname} #end </if>
+            #end
+        </where>
+    </sql>
+
+
+    <select id="get" resultType="${package}.domain.${className}DO">
+        SELECT
+            #foreach($column in $columns)$column.columnName#if($velocityCount != $columns.size()),#end#end
+        FROM ${tableName}
+        where ${pk.columnName} = #{value}
+    </select>
+
+
+    <select id="list" resultType="${package}.domain.${className}DO">
+        SELECT
+        #foreach($column in $columns)$column.columnName#if($velocityCount != $columns.size()),#end #end
+        FROM ${tableName}
+        <include refid="common_certain_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY ${pk.columnName} DESC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+
+    </select>
+
+    <select id="fuzzyQueryList" resultType="${package}.domain.${className}DO">
+        SELECT
+        #foreach($column in $columns)$column.columnName#if($velocityCount != $columns.size()),#end #end
+        FROM ${tableName}
+        <include refid="common_fuzzy_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY ${pk.columnName} DESC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from ${tableName}
+        <include refid="common_certain_condition"></include>
+    </select>
+
+    <select id="fuzzyQueryCount" resultType="int">
+        select count(*) from ${tableName}
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <select id="findDatas" resultType="Map">
+        select * from ${tableName}
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <insert id="save" parameterType="${package}.domain.${className}DO"#if($pk.extra == 'auto_increment')
+            useGeneratedKeys="true" keyProperty="$pk.attrname"#end>
+        #if($pk.extra != 'auto_increment')
+            <selectKey keyProperty="$pk.attrname" resultType="Integer" order="BEFORE">
+                SELECT sys_seq('${tableName}')
+            </selectKey>
+        #end
+        insert into ${tableName}
+        (
+        #foreach($column in $columns)
+            #if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+                $column.columnName#if($velocityCount != $columns.size()), #end
+            #end
+        #end
+        )
+        values
+        (
+        #foreach($column in $columns)
+
+            ##if($column.columnName != $pk.columnName )
+            ##if(${column.dataType} =="varchar" || ${column.dataType} =="varchar2" || ${column.dataType} ==
+            ## "nvarchar2" || ${column.dataType} =="datetime")
+
+            #if(${column.dataType} =="char")
+                #{$column.attrname, jdbcType=CHAR}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="LONG")
+                #{$column.attrname, jdbcType=BIGINT}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="varchar")
+                #{$column.attrname, jdbcType=VARCHAR}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="date")
+                #{$column.attrname, jdbcType=DATE}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="datetime")
+                #{$column.attrname, jdbcType=TIMESTAMP}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="decimal")
+                #{$column.attrname, jdbcType=DECIMAL}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="numeric")
+                #{$column.attrname, jdbcType=NUMERIC}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="tinyint")
+                #{$column.attrname, jdbcType=TINYINT}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="int")
+                #{$column.attrname, jdbcType=INTEGER}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="double")
+                #{$column.attrname, jdbcType=DOUBLE}#if($velocityCount != $columns.size()), #end
+            #end
+            #if(${column.dataType} =="float")
+                #{$column.attrname, jdbcType=FLOAT}#if($velocityCount != $columns.size()), #end
+            #end
+        #end
+        <!--原本
+         ##else
+            sys_seq('##${tableName}')  ##if($velocityCount != $columns.size()), #end
+           ##end##
+           -->
+        )
+    </insert>
+
+
+    <update id="update" parameterType="${package}.domain.${className}DO">
+        update ${tableName}
+        <set>
+            #foreach($column in $columns)
+                #if($column.columnName != $pk.columnName)
+                    <if test="$column.attrname != null">$column.columnName = #{$column.attrname
+                        }#if($velocityCount != $columns.size()), #end</if>
+                #end
+            #end
+        </set>
+        where ${pk.columnName} = #{${pk.attrname}}
+    </update>
+    <!-- 修改之后-->
+    <update id="remove">
+        update ${tableName} set is_del=1
+        where ${pk.columnName} = #{value}
+    </update>
+
+    <update id="batchRemove">
+        update ${tableName} set is_del=1 where ${pk.columnName} in
+        <foreach item="${pk.attrname}" collection="ids" open="(" separator="," close=")">
+            #{${pk.attrname}}
+        </foreach>
+
+    </update>
+
+    <!--
+    <delete id="remove">
+		delete from ${tableName} where ${pk.columnName} = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from ${tableName} where ${pk.columnName} in
+        <foreach item="${pk.attrname}" collection="array" open="(" separator="," close=")">
+            #{${pk.attrname}}
+        </foreach>
+    </delete>
+-->
+</mapper>

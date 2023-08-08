@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.BeautyProxyDao">
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_proxy
+        (name, startnum, emdnum, dividends, product_offers, people_insured, mir, def)
+        values (#{name},
+                #{startnum},
+                #{emdnum},
+                #{dividends},
+                #{product_offers},
+                #{people_insured},
+                #{mir},
+                #{def})
+    </insert>
+
+    <select id="list" resultType="com.yuanzheng.beauty.domain.BeautyProxyDo">
+        select id,
+               name,
+               startnum,
+               emdnum,
+               dividends,
+               product_offers,
+               people_insured,
+               mir,
+               created_time,
+               updated_time,
+               sore,
+               status,
+               def
+        from beauty_proxy
+        where status = 1
+    </select>
+
+
+</mapper>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.BannerDao">
+    <!--精确查找 -->
+    <sql id="common_certain_condition">
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="bannerType != null and bannerType != ''">AND banner_type = #{bannerType}</if>
+            <if test="bannerSite != null and bannerSite != ''">AND banner_site = #{bannerSite}</if>
+            <if test="bannerUrl != null and bannerUrl != ''">AND banner_url = #{bannerUrl}</if>
+            <if test="bannerCover != null and bannerCover != ''">AND banner_cover = #{bannerCover}</if>
+            <if test="bannerBegin != null and bannerBegin != ''"><![CDATA[ AND NOW()>= banner_begin ]]></if>
+            <if test="bannerEnd != null and bannerEnd != ''"><![CDATA[ AND NOW()<= banner_end ]]></if>
+            <if test="createTime != null and createTime != ''">AND create_time = #{createTime}</if>
+            <if test="updateTime != null and updateTime != ''">AND update_time = #{updateTime}</if>
+        </where>
+    </sql>
+
+    <!--精确模糊查询 -->
+    <sql id="common_fuzzy_condition">
+        <where>
+            <if test="id != null and id != ''">AND id = #{id}</if>
+            <if test="bannerType != null and bannerType != ''">AND banner_type LIKE '%${ bannerType}%'</if>
+            <if test="bannerSite != null and bannerSite != ''">AND banner_site LIKE '%${ bannerSite}%'</if>
+            <if test="bannerUrl != null and bannerUrl != ''">AND banner_url LIKE '%${ bannerUrl}%'</if>
+            <if test="bannerCover != null and bannerCover != ''">AND banner_cover LIKE '%${ bannerCover}%'</if>
+            <if test="bannerBegin != null and bannerBegin != ''">AND banner_begin = #{bannerBegin}</if>
+            <if test="bannerEnd != null and bannerEnd != ''">AND banner_end = #{bannerEnd}</if>
+            <if test="createTime != null and createTime != ''">AND create_time LIKE '%${ createTime}%'</if>
+            <if test="updateTime != null and updateTime != ''">AND update_time LIKE '%${ updateTime}%'</if>
+        </where>
+    </sql>
+
+
+    <select id="get" resultType="com.yuanzheng.beauty.domain.BannerDO">
+        SELECT id,
+               banner_type,
+               banner_site,
+               banner_url,
+               banner_cover,
+               banner_begin,
+               banner_end,
+               create_time,
+               update_time
+        FROM beauty_banner
+        where id = #{value}
+    </select>
+
+
+    <select id="list" resultType="com.yuanzheng.beauty.domain.BannerDO">
+        SELECT
+        id, banner_type, banner_site, banner_url, banner_cover, banner_begin,
+        banner_end, create_time, update_time FROM beauty_banner
+        <include refid="common_certain_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY id ASC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+
+    </select>
+
+    <select id="fuzzyQueryList"
+            resultType="com.yuanzheng.beauty.domain.BannerDO">
+        SELECT
+        id, banner_type, banner_site, banner_url, banner_cover, banner_begin,
+        banner_end, create_time, update_time FROM beauty_banner
+        <include refid="common_fuzzy_condition"></include>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_banner
+        <include refid="common_certain_condition"></include>
+    </select>
+
+    <select id="fuzzyQueryCount" resultType="int">
+        select count(*) from beauty_banner
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <select id="findDatas" resultType="Map">
+        select * from beauty_banner
+        <include refid="common_fuzzy_condition"></include>
+    </select>
+
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.BannerDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_banner
+        (banner_type,
+         banner_site,
+         banner_url,
+         banner_cover,
+         banner_begin,
+         banner_end,
+         create_time,
+         update_time)
+        values (#{bannerType, jdbcType=VARCHAR},
+                #{bannerSite, jdbcType=VARCHAR},
+                #{bannerUrl, jdbcType=VARCHAR},
+                #{bannerCover, jdbcType=VARCHAR},
+                #{bannerBegin, jdbcType=DATE},
+                #{bannerEnd, jdbcType=DATE},
+                #{createTime, jdbcType=TIMESTAMP},
+                #{updateTime, jdbcType=TIMESTAMP})
+    </insert>
+
+
+    <update id="update"
+            parameterType="com.yuanzheng.beauty.domain.BannerDO">
+        update beauty_banner
+        <set>
+            <if test="bannerType != null">banner_type = #{bannerType},</if>
+            <if test="bannerSite != null">banner_site = #{bannerSite},</if>
+            <if test="bannerUrl != null">banner_url = #{bannerUrl},</if>
+            <if test="bannerCover != null">banner_cover = #{bannerCover},</if>
+            <if test="bannerBegin != null">banner_begin = #{bannerBegin},</if>
+            <if test="bannerEnd != null">banner_end = #{bannerEnd},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+    <!-- 修改之后 -->
+    <update id="remove">
+        delete
+        from beauty_banner
+        where id = #{value}
+    </update>
+
+    <update id="batchRemove">
+        update beauty_banner set is_del=1 where id in
+        <foreach item="id" collection="ids" open="(" separator=","
+                 close=")">
+            #{id}
+        </foreach>
+
+    </update>
+
+    <!-- <delete id="remove"> delete from env_banner where id = #{value} </delete>
+        <delete id="batchRemove"> delete from env_banner where id in <foreach item="id"
+        collection="array" open="(" separator="," close=")"> #{id} </foreach> </delete> -->
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.WalletChargeDao">
+
+    <select id="get" resultType="com.yuanzheng.beauty.domain.WalletChargeDo">
+        select *
+        from beauty_wallet_charge
+        where id = #{value}
+    </select>
+
+    <select id="list"
+            resultType="map">
+        select
+        b.id,a.nick_name as nickName,a.mobile,
+        b.type as type,b.fsup_money as fsupMoney,b.money as money,
+        b.bsup_money as bsupMoney,b.create_time as createTime
+        from beauty_wallet_charge b left join beauty_agent a on a.id = b.agent_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and a.nick_name LIKE '%${ nickName}%'</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by a.id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_wallet_charge b left join beauty_agent a on a.id = b.agent_id
+        <where>
+            <if test="mobile != null and mobile != ''">and a.mobile LIKE '%${ mobile}%'</if>
+            <if test="nickName != null and nickName != ''">and nick_name LIKE '%${ nickName}%'</if>
+        </where>
+    </select>
+    <delete id="remove">
+        delete
+        from beauty_wallet_charge
+        where id = #{value}
+    </delete>
+
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.WalletChargeDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_wallet_charge
+        (agent_id, type, money, fsup_money, bsup_money, create_time)
+        values (#{agentId},
+                #{type},
+                #{money},
+                #{fsupMoney},
+                #{bsupMoney},
+                #{createTime})
+    </insert>
+</mapper>

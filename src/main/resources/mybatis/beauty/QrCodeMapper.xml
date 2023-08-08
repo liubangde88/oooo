@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuanzheng.beauty.dao.QrCodeDao">
+
+    <select id="get"
+            resultType="com.yuanzheng.beauty.domain.QrCodeDo">
+        select id,
+               qr_url,
+               qr_name,
+               qr_account,
+               qr_address,
+               create_time
+        from beauty_qr_code
+        where id = #{value}
+    </select>
+    <select id="getListQrcode"
+            resultType="com.yuanzheng.beauty.domain.QrCodeDo">
+        select id,
+               qr_url,
+               qr_name,
+               qr_account,
+               qr_address,
+               create_time
+        from beauty_qr_code
+        order by id desc
+    </select>
+    <select id="list"
+            resultType="com.yuanzheng.beauty.domain.QrCodeDo">
+        select
+        id,qr_url,qr_name,qr_account,qr_address,create_time
+        from beauty_qr_code
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from beauty_qr_code
+        <where>
+            <if test="name != null and name != ''">and name LIKE '%${ name}%'</if>
+        </where>
+    </select>
+
+    <update id="update"
+            parameterType="com.yuanzheng.beauty.domain.QrCodeDo">
+        update beauty_qr_code
+        <set>
+            <if test="qrUrl != null">qr_url = #{qrUrl},</if>
+            <if test="qrName != null">qr_name = #{qrName},</if>
+            <if test="qrAccount != null">qr_account = #{qrAccount},</if>
+            <if test="qrAddress != null">qr_address = #{qrAddress},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <insert id="save"
+            parameterType="com.yuanzheng.beauty.domain.QrCodeDo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into beauty_qr_code
+        (qr_url, qr_name, qr_account, qr_address, create_time)
+        values (#{qrUrl},
+                #{qrName},
+                #{qrAccount},
+                #{qrAddress},
+                #{createTime})
+    </insert>
+    <delete id="remove">
+        delete
+        from beauty_qr_code
+        where id = #{value}
+    </delete>
+
+</mapper>

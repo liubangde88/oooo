@@ -1,0 +1,138 @@
+package ${package}.controller;
+
+import java.util.Map;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.yuanzheng.common.controller.BaseController;
+import com.yuanzheng.common.domain.PageDO;
+import com.yuanzheng.common.utils.Query;
+import com.yuanzheng.common.utils.R;
+import ${package}.service.${className}Service;
+import ${package}.domain.${className}DO;
+
+/**
+ * ${comments}
+ * @author ${author}
+ * @date ${datetime}
+ */
+
+@Controller
+@RequestMapping("/${pathName}/${classname}")
+public class ${className}Controller extends BaseController {
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    private final Logger logger = LoggerFactory.getLogger(${className}Controller.class);
+
+    @GetMapping()
+    @RequiresPermissions("${pathName}:${classname}:${classname}")
+    String ${className}() {
+        return "${pathName}/${classname}/${classname}";
+    }
+
+    /**
+     * 分页列表查询
+     */
+    @ResponseBody
+    @GetMapping("/list")
+    @RequiresPermissions("${pathName}:${classname}:${classname}")
+    PageDO<${className}DO> list(@RequestParam Map<String, Object> params) {
+        Query query = new Query(params);
+        PageDO<${className}DO> page = ${classname}Service.queryList(query);
+        logger.info("操作者:" + getUserId() + "${comments}分页列表查询,");
+        return page;
+    }
+
+    /**
+     * 跳转到新增页面
+     */
+    @GetMapping("/add")
+    @RequiresPermissions("${pathName}:${classname}:add")
+    ModelAndView add() {
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("${classname}", new ${className}DO());
+        mv.setViewName("${pathName}/${classname}/add");
+        return mv;
+    }
+
+    /**
+     * 跳转到修改页面
+     */
+    @GetMapping("/edit/{${pk.attrname}}")
+    @RequiresPermissions("${pathName}:${classname}:edit")
+    ModelAndView edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}) {
+        ModelAndView mv = new ModelAndView();
+            ${className}DO ${classname} = ${classname}Service.get(${pk.attrname});
+        mv.addObject("${classname}", ${classname});
+        mv.setViewName("${pathName}/${classname}/edit");
+        return mv;
+    }
+
+    /**
+     * 新增方法
+     */
+    @ResponseBody
+    @PostMapping("/save")
+    @RequiresPermissions("${pathName}:${classname}:add")
+    public R save( ${className}DO ${classname}) {
+        if (${classname}Service.save(${classname}) > 0) {
+            logger.info("操作者:" + getUserId() + "  新增${comments}：");
+
+            return R.ok();
+        }
+        return R.error();
+    }
+
+    /**
+     * 修改方法
+     */
+    @ResponseBody
+    @RequestMapping("/update")
+    @RequiresPermissions("${pathName}:${classname}:edit")
+    public R update( ${className}DO ${classname}) {
+            ${classname}Service.update(${classname});
+        logger.info("操作者:" + getUserId() + "  修改${comments}：" +${classname}.getId() );
+
+        return R.ok();
+    }
+
+    /**
+     * 单条删除方法
+     */
+    @PostMapping("/remove")
+    @ResponseBody
+    @RequiresPermissions("${pathName}:${classname}:remove")
+    public R remove( ${pk.attrType} ${pk.attrname}) {
+        if (${classname}Service.remove(${pk.attrname}) > 0) {
+            logger.info("操作者:" + getUserId() + "  删除：" +${pk.attrname} );
+            return R.ok();
+        }
+        return R.error();
+    }
+
+    /**
+     * 批量删除方法
+     */
+    @PostMapping("/batchRemove")
+    @ResponseBody
+    @RequiresPermissions("${pathName}:${classname}:batchRemove")
+    public R remove(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s) {
+            ${classname}Service.batchRemove(${pk.attrname}s);
+        logger.info("操作者:" + getUserId() + "  批量删除：" + ${pk.attrname}s);
+
+        return R.ok();
+    }
+
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" enctype="multipart/form-data" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类型：</label>
+                            <div class="col-sm-8">
+                                <select class="form-control chosen-select" data-placeholder="--选择类别--" id="type"
+                                        name="type" required tabindex="2">
+                                    <option value="">--选择类别--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">标题：</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="title" name="title" required type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">内容：</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" id="content" name="content" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">附件：</label>
+                            <div class="col-sm-8">
+                                <button class="layui-btn" id="test1" type="button">
+                                    <i class="fa fa-cloud"></i>上传附件
+                                </button>
+                                <input class="form-control" id="files" name="files" type="hidden">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">接收部门：</label>
+                            <div class="col-sm-8">
+                                <input class="hidden" id="deptIds" name="deptIds">
+                                <input class="form-control" id="deptNames" name="deptNames"
+                                       onclick="openDept()" placeholder="接收部门"
+                                       readonly="readonly" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">备注信息：</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" id="remarks" name="remarks"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:src="@{/js/plugins/layui/layui.js}"></script>
+<script th:src="@{/js/appjs/oa/notify/add.js}" type="text/javascript">
+
+</script>
+<script type="text/javascript">
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        console.log(upload);
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            url: ctx + '/common/sysFile/upload', //上传接口
+            size: 1000,
+            accept: 'file',
+            done: function (r) {
+                layer.msg(r.msg);
+                $("#files").val(r.fileName);
+            },
+            error: function (r) {
+                layer.msg(r.msg);
+            }
+        });
+    });
+</script>
+</body>
+</html>

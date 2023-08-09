@@ -2,7 +2,6 @@ package com.yuanzheng.beauty.service;
 
 
 import com.yuanzheng.beauty.domain.BeautyProxyDo;
-import com.yuanzheng.common.domain.PageDO;
 
 import java.util.List;
 import java.util.Map;
@@ -17,4 +16,9 @@ public interface BeautyProxyService {
     List<BeautyProxyDo> getList(Map<String, Object> map);
 
     int save(BeautyProxyDo data);
+
+
+    int updateByPrimaryKeySelective(BeautyProxyDo data);
+
+    BeautyProxyDo selectByPrimaryKey(int proxyId);
 }

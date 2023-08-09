@@ -1,7 +1,6 @@
 package com.yuanzheng.system.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.yuanzheng.beauty.domain.BeautyProxyDo;
 import com.yuanzheng.beauty.service.BeautyProxyService;
 import com.yuanzheng.common.controller.BaseController;
@@ -13,15 +12,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
-import java.text.NumberFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/system/proxy")
 public class ProxyController extends BaseController {
+
+
     @Autowired
     BeautyProxyService proxyService;
+
     private String prefix = "system/proxy";
 
     @GetMapping("/list")
@@ -35,17 +38,13 @@ public class ProxyController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "代理配置列表", httpMethod = "POST")
     R ajaxList() {
-
         // 获取代理等级列表
         Map<String, Object> where = new HashMap<>();
         where.put("status", 1);
         where.put("sort", "ASC");
         List<BeautyProxyDo> list = proxyService.getList(where);
-        System.out.println("=============");
-        System.out.println(list);
-        System.out.println("=============");
 
-        return R.ok();
+        return R.ok().put("list", list);
     }
 
 
@@ -55,11 +54,10 @@ public class ProxyController extends BaseController {
         return prefix + "/add";
     }
 
-
     @PostMapping("/add")
     @ResponseBody
     @ApiOperation(value = "添加配置", httpMethod = "POST")
-    R ajaxAdd(@RequestParam Map<String, Object> params) {
+    R ajaxAdd(@RequestParam Map<String, Object> params, BeautyProxyDo beautyProxyDo) {
         // 定义错误信息
         Map<String, String> errInfo = new HashMap<String, String>() {{
             put("name", "代理名称必填");
@@ -89,18 +87,71 @@ public class ProxyController extends BaseController {
             }
 
             // 判断def 是否已设置
-            Map<String, Object> where = new HashMap<>();
-            where.put("def", 1);
-            List<BeautyProxyDo> list = proxyService.getList(where);
-            if (list.size() > 0 && !Objects.equals(key, "def")) {
-                return R.error(errInfo.get(key));
+            if (params.get("def") == "1") {
+                Map<String, Object> where = new HashMap<>();
+                where.put("def", 1);
+                List<BeautyProxyDo> list = proxyService.getList(where);
+                if (list.size() > 0 && !Objects.equals(key, "def")) {
+                    return R.error("新用户注册是默认代理层级已设置，请勿重复设置！");
+                }
             }
         }
 
         // 数据入库
-        BeautyProxyDo risk = JSON.parseObject(JSON.toJSONString(params), BeautyProxyDo.class);
-        int aa = proxyService.save(risk);
+        int product_offers = Integer.valueOf((String) params.get("product_offers")).intValue();
+        int people_insured = Integer.valueOf((String) params.get("people_insured")).intValue();
+        beautyProxyDo.setProductOffers(product_offers);
+        beautyProxyDo.setPeopleInsured(people_insured);
+        proxyService.save(beautyProxyDo);
 
-        return R.ok().put("result", aa);
+        return R.ok().put("result", params);
     }
+
+    @PostMapping("/updateSore")
+    @ResponseBody
+    @ApiOperation(value = "修改代理配置")
+    R ajaxUpdateSore(BeautyProxyDo beautyProxyDo) {
+        if (beautyProxyDo.getId() == 0 || beautyProxyDo.getId() == null) {
+            return R.error("无id值");
+        }
+
+        // 修改排序值
+        if (beautyProxyDo.getSore() != 0) {
+            proxyService.updateByPrimaryKeySelective(beautyProxyDo);
+        }
+
+        return R.ok().put("data", beautyProxyDo);
+    }
+
+    @GetMapping("/edit")
+    String edit(Model model) {
+
+        return prefix + "/edit";
+    }
+
+    @PostMapping("/getProxy")
+    @ResponseBody
+    @ApiOperation(value = "获取一条代理配置信息")
+    R ajaxGetProxy(BeautyProxyDo beautyProxyDo) {
+
+        int proxyId = beautyProxyDo.getId();
+
+        // 参数验证
+        if (proxyId == 0) {
+            return R.error("无id值");
+        }
+
+        BeautyProxyDo data = proxyService.selectByPrimaryKey(proxyId);
+        return R.ok().put("data", data);
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    @ApiOperation(value = "删除")
+    R ajaxDel(List<Integer> id) {
+
+
+        return R.ok().put("data", id);
+    }
+
 }

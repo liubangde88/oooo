@@ -27,7 +27,17 @@ public class BeautyProxyServiceImpl implements BeautyProxyService {
 
     @Override
     public int save(BeautyProxyDo data) {
-        return beautyProxyDao.save(data);
+        return beautyProxyDao.insert(data);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(BeautyProxyDo beautyProxyDo) {
+        return beautyProxyDao.updateByPrimaryKeySelective(beautyProxyDo);
+    }
+
+    @Override
+    public BeautyProxyDo selectByPrimaryKey(int proxyId) {
+        return beautyProxyDao.selectByPrimaryKey(proxyId);
     }
 }
 

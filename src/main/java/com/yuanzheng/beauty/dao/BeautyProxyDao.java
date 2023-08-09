@@ -10,5 +10,15 @@ public interface BeautyProxyDao {
 
     List<BeautyProxyDo> list(Map<String, Object> map);
 
-    int save(BeautyProxyDo data);
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(BeautyProxyDo record);
+
+    int insertSelective(BeautyProxyDo record);
+
+    BeautyProxyDo selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(BeautyProxyDo record);
+
+    int updateByPrimaryKey(BeautyProxyDo record);
 }

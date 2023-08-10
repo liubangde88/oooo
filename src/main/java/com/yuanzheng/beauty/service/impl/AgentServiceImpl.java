@@ -73,4 +73,9 @@ public class AgentServiceImpl implements AgentService {
         return agentDao.getAllCount();
     }
 
+    @Override
+    public List<AgentDo> getList(AgentDo agentDo) {
+        return agentDao.getList(agentDo);
+    }
+
 }

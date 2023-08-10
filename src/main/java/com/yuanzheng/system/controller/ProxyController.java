@@ -60,7 +60,7 @@ public class ProxyController extends BaseController {
     R ajaxAdd(@RequestParam Map<String, Object> params, BeautyProxyDo beautyProxyDo) {
         // 定义错误信息
         Map<String, String> errInfo = new HashMap<String, String>() {{
-            put("name", "代理名称必填");
+            put("name", "代理名称必填且不能为数字");
             put("startnum", "人数区间必填且必须为数字");
             put("emdnum", "人数区间必填且必须为数字");
             put("dividends", "分红比例必填且必须为100以内的数字");
@@ -72,18 +72,18 @@ public class ProxyController extends BaseController {
             put("img", "请上传图片");
         }};
 
-        // 参数验证
+        //参数验证
         for (Map.Entry<String, Object> item : params.entrySet()) {
             String key = item.getKey();
             String val = ((String) item.getValue()).trim();
-
+            System.out.println(key + "：" + (val.length() == 0));
             // 判断入参是否为空
-            if (val.length() == 0) { //&& !
+            if (val.length() == 0) {
                 return R.error(errInfo.get(key));
             }
 
             // 如果不为空就判断数据类型
-            if (!Objects.equals(key, "name") && !Help.isNumeric(val)) {
+            if (Objects.equals(key, "name") && Help.isNumeric(val)) {
                 return R.error(errInfo.get(key));
             }
 

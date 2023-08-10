@@ -2,16 +2,16 @@ package com.yuanzheng.api;
 
 import com.yuanzheng.beauty.domain.AgentDo;
 import com.yuanzheng.beauty.domain.AgentWalletDo;
+import com.yuanzheng.beauty.domain.BeautyProxyDo;
 import com.yuanzheng.beauty.domain.EmailLogDo;
 import com.yuanzheng.beauty.service.AgentService;
 import com.yuanzheng.beauty.service.AgentWalletService;
+import com.yuanzheng.beauty.service.BeautyProxyService;
 import com.yuanzheng.beauty.service.EmailLogService;
 import com.yuanzheng.common.domain.DictDO;
+import com.yuanzheng.common.domain.PageDO;
 import com.yuanzheng.common.service.DictService;
-import com.yuanzheng.common.utils.MD5Utils;
-import com.yuanzheng.common.utils.R;
-import com.yuanzheng.common.utils.SendEmailUtil;
-import com.yuanzheng.common.utils.StringUtils;
+import com.yuanzheng.common.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,6 +38,8 @@ public class ApiAgentController {
     @Autowired
     private EmailLogService emailLogService;
 
+    @Autowired
+    private BeautyProxyService beautyProxyService;
 
     @PostMapping(value = "/sendEmail")
     @ResponseBody
@@ -233,5 +235,26 @@ public class ApiAgentController {
             sb.append(str.charAt(number));
         }
         return sb.toString();
+    }
+
+
+    @PostMapping(value = "/getVipList")
+    @ResponseBody
+    @ApiOperation(value = "获取会员列表以及个人信息", httpMethod = "POST")
+    public R getVipList(@RequestParam Long agentId) {
+        // 获取用户信息
+        AgentDo userInfo = agentService.get(agentId);
+
+        // 获取代理列表
+        Map<String, Object> where = new HashMap<>();
+        where.put("status", 1);
+        List<BeautyProxyDo> proxyList = beautyProxyService.getList(where);
+
+        // 获取当前用户有效下级会员人数
+        AgentDo agentdo = new AgentDo();
+        agentdo.setUpAgent(agentId);
+        List<AgentDo> list = agentService.getList(agentdo);
+
+        return R.ok().put("userInfo", userInfo).put("list", list);
     }
 }

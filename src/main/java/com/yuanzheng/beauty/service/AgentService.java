@@ -4,6 +4,8 @@ import com.yuanzheng.beauty.domain.AgentDo;
 import com.yuanzheng.common.domain.PageDO;
 import com.yuanzheng.common.utils.Query;
 
+import java.util.List;
+
 public interface AgentService {
 
     AgentDo get(Long id);
@@ -23,4 +25,7 @@ public interface AgentService {
     int count(Query query);
 
     int getAllCount();
+
+
+    List<AgentDo> getList(AgentDo map);
 }

@@ -67,7 +67,8 @@ public class BeautyProxyDo implements Serializable {
      */
     private Integer def;
 
-    public BeautyProxyDo(Integer id, String name, Integer startnum, Integer emdnum, Integer dividends, Integer productOffers, Integer peopleInsured, Integer mir, Date createdTime, Date updatedTime, Integer sore, Integer status, Integer def) {
+    private String img;
+    public BeautyProxyDo(Integer id, String name, Integer startnum, Integer emdnum, Integer dividends, Integer productOffers, Integer peopleInsured, Integer mir, Date createdTime, Date updatedTime, Integer sore, Integer status, Integer def, String img) {
         this.id = id;
         this.name = name;
         this.startnum = startnum;
@@ -81,6 +82,7 @@ public class BeautyProxyDo implements Serializable {
         this.sore = sore;
         this.status = status;
         this.def = def;
+        this.img = img;
     }
 
 
@@ -189,4 +191,11 @@ public class BeautyProxyDo implements Serializable {
     }
 
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }

@@ -34,7 +34,7 @@
             <!--面包屑-->
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-4 col-3" style="margin-bottom: 2rem; margin-top: 3rem;">
-                    <h4 class="page-title">/添加代理配置</h4>
+                    <h4 class="page-title"><a href="list">代理列表</a>/添加会员配置</h4>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label">代理名称: </label>
                             <div class="col-lg-9">
-                                <input class="form-control form-control-lg" placeholder="如：一级代理" name="name"
+                                <input class="form-control form-control-lg" placeholder="如：青铜会员" name="name"
                                        type="text">
                             </div>
                         </div>
@@ -128,7 +128,6 @@
                             </div>
                         </div>
 
-
                         <!--医保报销比例-->
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label">医保报销比例%: </label>
@@ -139,6 +138,19 @@
                             </div>
                         </div>
 
+                        <!--封面图上传-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">封面图上传: </label>
+                            <div class="col-lg-9">
+                                <div>
+                                    <input class="form-control form-control-lg" type="file" @change="uploadImg()">
+                                </div>
+                                <div id="img-container" style="padding-top: 1.5rem; padding-bottom: 1.5rem">
+                                    <img src="" height="80"/>
+                                    <input type="text" name="img" id="imgInput" style="display: none">
+                                </div>
+                            </div>
+                        </div>
 
                         <!--是否启用该代理层级-->
                         <div class="form-group row">
@@ -220,6 +232,24 @@
             errAlert: closeErrorAlert()
         },
         methods: {
+            // 图片上传操作
+            uploadImg() {
+                var preview = document.querySelector("img");
+                var file = document.querySelector("input[type=file]").files[0];
+                var reader = new FileReader();
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = '';
+                }
+
+                reader.onloadend = function () {
+                    let base = reader.result
+                    preview.src = base;
+                    $("#imgInput").attr("value", base)
+                }
+
+            },
             // 打开或关闭
             errorModel(errMsg) {
                 let _that = this
@@ -245,6 +275,7 @@
                     obj[form [i].name] = form [i]['value'];
                 }
                 let _that = this
+                console.log(obj)
                 $.ajax({
                     type: "POST",//方法类型
                     url: "",//url

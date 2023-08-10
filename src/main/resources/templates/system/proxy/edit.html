@@ -141,17 +141,16 @@
 
                         <!--封面图上传-->
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label">医保报销比例%: </label>
+                            <label class="col-lg-3 col-form-label">封面图上传: </label>
                             <div class="col-lg-9">
                                 <div>
                                     <input class="form-control form-control-lg" type="file" @change="uploadImg()">
                                 </div>
                                 <div id="img-container" style="padding-top: 1.5rem; padding-bottom: 1.5rem">
-                                    <img src="" height="80"/>
+                                    <img :src="proxyInfo.img" height="80"/>
                                     <input type="text" name="img" id="imgInput" style="display: none">
                                 </div>
                             </div>
-
                         </div>
 
                         <!--是否启用该代理层级-->

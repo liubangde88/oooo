@@ -69,6 +69,7 @@ public class ProxyController extends BaseController {
             put("mir", "医保比例必填且必须为数字");
             put("status", "是否启用必选");
             put("def", "是否为新注册用户默认代理且全局只能有一个");
+            put("img", "请上传图片");
         }};
 
         // 参数验证

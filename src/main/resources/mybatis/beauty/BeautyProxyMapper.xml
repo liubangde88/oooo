@@ -3,7 +3,6 @@
 
 <mapper namespace="com.yuanzheng.beauty.dao.BeautyProxyDao">
 
- 
 
     <select id="list" resultType="com.yuanzheng.beauty.domain.BeautyProxyDo">
         select id,
@@ -18,48 +17,54 @@
                updated_time,
                sore,
                status,
-               def
+               def,
+               img
         from beauty_proxy
         where status = 1
     </select>
     <resultMap id="BaseResultMap" type="com.yuanzheng.beauty.domain.BeautyProxyDo">
-        <id column="id" jdbcType="INTEGER" property="id" />
-        <result column="name" jdbcType="CHAR" property="name" />
-        <result column="startnum" jdbcType="INTEGER" property="startnum" />
-        <result column="emdnum" jdbcType="INTEGER" property="emdnum" />
-        <result column="dividends" jdbcType="INTEGER" property="dividends" />
-        <result column="product_offers" jdbcType="INTEGER" property="productOffers" />
-        <result column="people_insured" jdbcType="INTEGER" property="peopleInsured" />
-        <result column="mir" jdbcType="INTEGER" property="mir" />
-        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
-        <result column="sore" jdbcType="INTEGER" property="sore" />
-        <result column="status" jdbcType="INTEGER" property="status" />
-        <result column="def" jdbcType="INTEGER" property="def" />
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="startnum"  property="startnum"/>
+        <result column="emdnum"  property="emdnum"/>
+        <result column="dividends"  property="dividends"/>
+        <result column="product_offers"  property="productOffers"/>
+        <result column="people_insured"  property="peopleInsured"/>
+        <result column="mir"  property="mir"/>
+        <result column="created_time"  property="createdTime"/>
+        <result column="updated_time"  property="updatedTime"/>
+        <result column="sore"  property="sore"/>
+        <result column="status"  property="status"/>
+        <result column="def"  property="def"/>
+        <result column="img"  property="img"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, `name`, startnum, emdnum, dividends, product_offers, people_insured, mir, created_time,
-    updated_time, sore, `status`, def
+        id
+        , `name`, startnum, emdnum, dividends, product_offers, people_insured, mir, created_time,
+    updated_time, sore, `status`, def,img
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from beauty_proxy
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from beauty_proxy
-        where id = #{id,jdbcType=INTEGER}
+        delete
+        from beauty_proxy
+        where id = #{id}
     </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo" useGeneratedKeys="true">
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo"
+            useGeneratedKeys="true">
         insert into beauty_proxy (`name`, startnum, emdnum,
                                   dividends, product_offers, people_insured,
-                                  mir, `status`, def)
-        values (#{name,jdbcType=CHAR}, #{startnum,jdbcType=INTEGER}, #{emdnum,jdbcType=INTEGER},
-                #{dividends,jdbcType=INTEGER}, #{productOffers,jdbcType=INTEGER}, #{peopleInsured,jdbcType=INTEGER},
-                #{mir,jdbcType=INTEGER},  #{status,jdbcType=INTEGER}, #{def,jdbcType=INTEGER})
+                                  mir, `status`, def, img)
+        values (#{name}, #{startnum}, #{emdnum},
+                #{dividends}, #{productOffers}, #{peopleInsured},
+                #{mir}, #{status}, #{def}, #{img})
     </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo" useGeneratedKeys="true">
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo" useGeneratedKeys="true">
         insert into beauty_proxy
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null">
@@ -95,46 +100,52 @@
             <if test="status != null">
                 `status`,
             </if>
+            <if test="img != null">
+                #{img},
+            </if>
             <if test="def != null">
                 def,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null">
-                #{name,jdbcType=CHAR},
+                #{name},
             </if>
             <if test="startnum != null">
-                #{startnum,jdbcType=INTEGER},
+                #{startnum},
             </if>
             <if test="emdnum != null">
-                #{emdnum,jdbcType=INTEGER},
+                #{emdnum},
             </if>
             <if test="dividends != null">
-                #{dividends,jdbcType=INTEGER},
+                #{dividends},
             </if>
             <if test="productOffers != null">
-                #{productOffers,jdbcType=INTEGER},
+                #{productOffers},
             </if>
             <if test="peopleInsured != null">
-                #{peopleInsured,jdbcType=INTEGER},
+                #{peopleInsured},
             </if>
             <if test="mir != null">
-                #{mir,jdbcType=INTEGER},
+                #{mir},
             </if>
             <if test="createdTime != null">
-                #{createdTime,jdbcType=TIMESTAMP},
+                #{createdTime},
             </if>
             <if test="updatedTime != null">
-                #{updatedTime,jdbcType=TIMESTAMP},
+                #{updatedTime},
             </if>
             <if test="sore != null">
-                #{sore,jdbcType=INTEGER},
+                #{sore},
             </if>
             <if test="status != null">
-                #{status,jdbcType=INTEGER},
+                #{status},
+            </if>
+            <if test="img != null">
+                #{img},
             </if>
             <if test="def != null">
-                #{def,jdbcType=INTEGER},
+                #{def},
             </if>
         </trim>
     </insert>
@@ -142,59 +153,63 @@
         update beauty_proxy
         <set>
             <if test="name != null">
-                `name` = #{name,jdbcType=CHAR},
+                `name` = #{name},
             </if>
             <if test="startnum != null">
-                startnum = #{startnum,jdbcType=INTEGER},
+                startnum = #{startnum},
             </if>
             <if test="emdnum != null">
-                emdnum = #{emdnum,jdbcType=INTEGER},
+                emdnum = #{emdnum},
             </if>
             <if test="dividends != null">
-                dividends = #{dividends,jdbcType=INTEGER},
+                dividends = #{dividends},
             </if>
             <if test="productOffers != null">
-                product_offers = #{productOffers,jdbcType=INTEGER},
+                product_offers = #{productOffers},
             </if>
             <if test="peopleInsured != null">
-                people_insured = #{peopleInsured,jdbcType=INTEGER},
+                people_insured = #{peopleInsured},
             </if>
             <if test="mir != null">
-                mir = #{mir,jdbcType=INTEGER},
+                mir = #{mir},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+                created_time = #{createdTime},
             </if>
             <if test="updatedTime != null">
-                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+                updated_time = #{updatedTime},
             </if>
             <if test="sore != null">
-                sore = #{sore,jdbcType=INTEGER},
+                sore = #{sore},
             </if>
             <if test="status != null">
-                `status` = #{status,jdbcType=INTEGER},
+                `status` = #{status},
             </if>
             <if test="def != null">
-                def = #{def,jdbcType=INTEGER},
+                def = #{def},
+            </if>
+            <if test="img != null">
+                img = #{img},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yuanzheng.beauty.domain.BeautyProxyDo">
         update beauty_proxy
-        set `name` = #{name,jdbcType=CHAR},
-            startnum = #{startnum,jdbcType=INTEGER},
-            emdnum = #{emdnum,jdbcType=INTEGER},
-            dividends = #{dividends,jdbcType=INTEGER},
-            product_offers = #{productOffers,jdbcType=INTEGER},
-            people_insured = #{peopleInsured,jdbcType=INTEGER},
-            mir = #{mir,jdbcType=INTEGER},
-            created_time = #{createdTime,jdbcType=TIMESTAMP},
-            updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-            sore = #{sore,jdbcType=INTEGER},
-            `status` = #{status,jdbcType=INTEGER},
-            def = #{def,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
+        set `name`         = #{name},
+            startnum       = #{startnum},
+            emdnum         = #{emdnum},
+            dividends      = #{dividends},
+            product_offers = #{productOffers},
+            people_insured = #{peopleInsured},
+            mir            = #{mir},
+            created_time   = #{createdTime},
+            updated_time   = #{updatedTime},
+            sore           = #{sore},
+            `status`       = #{status},
+            def            = #{def},
+            img            = #{img}
+        where id = #{id}
     </update>
 
 </mapper>

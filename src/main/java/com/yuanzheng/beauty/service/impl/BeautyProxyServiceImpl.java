@@ -39,6 +39,11 @@ public class BeautyProxyServiceImpl implements BeautyProxyService {
     public BeautyProxyDo selectByPrimaryKey(int proxyId) {
         return beautyProxyDao.selectByPrimaryKey(proxyId);
     }
+
+    @Override
+    public int deleteByPrimaryKey(int id) {
+        return beautyProxyDao.deleteByPrimaryKey(id);
+    }
 }
 
 

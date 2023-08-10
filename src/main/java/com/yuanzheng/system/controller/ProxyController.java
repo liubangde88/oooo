@@ -123,6 +123,35 @@ public class ProxyController extends BaseController {
         return R.ok().put("data", beautyProxyDo);
     }
 
+    @PostMapping("/update")
+    @ResponseBody
+    @ApiOperation(value = "修改代理配置")
+    R ajaxUpdateAll(BeautyProxyDo beautyProxyDo) {
+        if (beautyProxyDo.getId() == 0 || beautyProxyDo.getId() == null) {
+            return R.error("无id值");
+        }
+
+        // 判断def 是否已设置
+        if (beautyProxyDo.getDef() != null && beautyProxyDo.getDef() == 1) {
+            Map<String, Object> where = new HashMap<>();
+            where.put("def", 1);
+            List<BeautyProxyDo> list = proxyService.getList(where);
+
+            if (!list.isEmpty()) {
+                // 判断是否是当前默认值
+                if (list.get(0).getDef() != 1) {
+                    return R.error("新用户注册是默认代理层级已设置，请勿重复设置！");
+                }
+
+            }
+        }
+
+        // 执行修改
+        proxyService.updateByPrimaryKeySelective(beautyProxyDo);
+
+        return R.ok().put("data", beautyProxyDo.getSore());
+    }
+
     @GetMapping("/edit")
     String edit(Model model) {
 
@@ -132,24 +161,24 @@ public class ProxyController extends BaseController {
     @PostMapping("/getProxy")
     @ResponseBody
     @ApiOperation(value = "获取一条代理配置信息")
-    R ajaxGetProxy(BeautyProxyDo beautyProxyDo) {
+    R ajaxGetProxy(int id) {
 
-        int proxyId = beautyProxyDo.getId();
 
         // 参数验证
-        if (proxyId == 0) {
+        if (id == 0) {
             return R.error("无id值");
         }
 
-        BeautyProxyDo data = proxyService.selectByPrimaryKey(proxyId);
+        BeautyProxyDo data = proxyService.selectByPrimaryKey(id);
         return R.ok().put("data", data);
     }
 
     @PostMapping("/del")
     @ResponseBody
     @ApiOperation(value = "删除")
-    R ajaxDel(List<Integer> id) {
+    R ajaxDel(int id) {
 
+        int aa = proxyService.deleteByPrimaryKey(id);
 
         return R.ok().put("data", id);
     }

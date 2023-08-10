@@ -38,6 +38,7 @@ public class AgentController extends BaseController {
     @GetMapping("/edit/{id}")
     @RequiresPermissions("beauty:agent:edit")
     ModelAndView edit(@PathVariable("id") Long id) {
+        System.out.println("121121");
         ModelAndView mv = new ModelAndView();
         AgentDo agent = agentService.get(id);
         mv.addObject("agent", agent);

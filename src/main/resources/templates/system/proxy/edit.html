@@ -20,9 +20,6 @@
     <link rel="stylesheet" th:href="@{/css/jsdelivr.css}">
     <link rel="stylesheet" th:href="@{/css/bts.css}">
     <style>
-        .card-box > .form-group {
-            margin-bottom: 3rem !important;
-        }
     </style>
 </head>
 
@@ -34,7 +31,8 @@
             <!--面包屑-->
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-4 col-3" style="margin-bottom: 2rem; margin-top: 3rem;">
-                    <h4 class="page-title">/添加代理配置</h4>
+                    <h4 class="page-title">
+                        <a href="list">代理列表</a>/修改代理配置</h4>
                 </div>
             </div>
 
@@ -70,7 +68,7 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label">代理名称: </label>
                             <div class="col-lg-9">
-                                <input class="form-control form-control-lg" placeholder="如：一级代理" name="name"
+                                <input class="form-control form-control-lg" :placeholder="proxyInfo.name" name="name"
                                        type="text">
                             </div>
                         </div>
@@ -81,13 +79,14 @@
                             <div class="col-lg-9">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input class="form-control form-control-lg" placeholder="如：1"
+                                        <input class="form-control form-control-lg"
+                                               :placeholder="proxyInfo.startnum"
                                                name="startnum"
                                                type="text">
                                     </div>
                                     <div class="col-md-6">
                                         <input class="form-control form-control-lg"
-                                               placeholder="如：2， 需大于第一个栏目填写的数值"
+                                               :placeholder="proxyInfo.emdnum"
                                                name="emdnum"
                                                type="text">
                                     </div>
@@ -100,7 +99,7 @@
                             <label class="col-lg-3 col-form-label">分红比例%: </label>
                             <div class="col-lg-9">
                                 <input class="form-control form-control-lg"
-                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
+                                       :placeholder="proxyInfo.dividends"
                                        name="dividends"
                                        type="text">
                             </div>
@@ -112,8 +111,8 @@
                             <label class="col-lg-3 col-form-label">优惠折扣%: </label>
                             <div class="col-lg-9">
                                 <input class="form-control form-control-lg"
-                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
-                                       name="product_offers"
+                                       :placeholder="proxyInfo.productOffers"
+                                       name="productOffers"
                                        type="text">
                             </div>
                         </div>
@@ -123,7 +122,8 @@
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label">受保人数</label>
                             <div class="col-lg-9">
-                                <input class="form-control form-control-lg" name="people_insured" placeholder="输入数字"
+                                <input class="form-control form-control-lg" name="peopleInsured"
+                                       :placeholder="proxyInfo.peopleInsured"
                                        type="text">
                             </div>
                         </div>
@@ -134,25 +134,46 @@
                             <label class="col-lg-3 col-form-label">医保报销比例%: </label>
                             <div class="col-lg-9">
                                 <input class="form-control form-control-lg" name="mir"
-                                       placeholder="只能是100以内的数字， 如填入20，系统则认为是20%"
+                                       :placeholder="proxyInfo.mir"
                                        type="text">
                             </div>
                         </div>
 
+                        <!--封面图上传-->
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">医保报销比例%: </label>
+                            <div class="col-lg-9">
+                                <div>
+                                    <input class="form-control form-control-lg" type="file" @change="uploadImg()">
+                                </div>
+                                <div id="img-container" style="padding-top: 1.5rem; padding-bottom: 1.5rem">
+                                    <img src="" height="80"/>
+                                    <input type="text" name="img" id="imgInput" style="display: none">
+                                </div>
+                            </div>
+
+                        </div>
 
                         <!--是否启用该代理层级-->
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">是否启用该代理层级</label>
                             <div class="col-md-9">
                                 <div class="form-check form-check-inline">
-                                    <input checked class="form-check-input" name="status" type="radio"
+                                    <input v-if="proxyInfo.status == 1" checked class="form-check-input" name="status"
+                                           type="radio"
+                                           value="1">
+                                    <input v-else class="form-check-input" name="status" type="radio"
                                            value="1">
                                     <label class="form-check-label" for="gender_male">
                                         是
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" name="status" type="radio" value="0">
+                                    <input v-if="proxyInfo.status == 0" checked class="form-check-input" name="status"
+                                           type="radio"
+                                           value="0">
+                                    <input v-else class="form-check-input" name="status" type="radio"
+                                           value="0">
                                     <label class="form-check-label" for="gender_female">
                                         否
                                     </label>
@@ -165,21 +186,28 @@
                             <label class="col-md-3 col-form-label">是否设置为新注册用户初始代理层级</label>
                             <div class="col-md-9">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" id="gender_male" name="def"
+                                    <input v-if="proxyInfo.def == 1" checked class="form-check-input" id="gender_male"
+                                           name="def"
+                                           type="radio"
+                                           value="1">
+                                    <input v-else class="form-check-input" name="def"
                                            type="radio" value="1">
                                     <label class="form-check-label" for="gender_male">
                                         是
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input checked class="form-check-input" id="gender_female" name="def" type="radio"
+                                    <input v-if="proxyInfo.def == 0" checked class="form-check-input" id="gender_female"
+                                           name="def"
+                                           type="radio"
                                            value="0">
-                                    <label class="form-check-label" for="gender_female">
+                                    <label v-else class="form-check-label" for="gender_female">
                                         否
                                     </label>
                                 </div>
                             </div>
                         </div>
+
 
                         <!--提交按钮-->
                         <div class="text-right">
@@ -197,6 +225,7 @@
 <script th:src="@{/js/common/vue-router.js}" type="text/javascript"></script>
 
 <script type="text/javascript">
+
     // 关闭错误消息弹窗方法
     function closeErrorAlert() {
         $("#error_ms").css("display", "none");
@@ -212,14 +241,73 @@
         return new Promise(resolve => setTimeout(resolve, time))
     }
 
+    function preProcessData(formData) {
+        /* 删除空值 */
+        Object.keys(formData).forEach(item => {
+            if (this.isEmpty(formData[item])) {
+                delete formData[item];
+            }
+        })
+        return formData;
+    }
+
+    function isEmpty(obj) {
+        if (typeof obj === 'undefined' || obj === null || obj === '') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     // Vue
     var vm = new Vue({
         el: '#app',
         data: {
             errInfo: "",  // 错误信息
-            errAlert: closeErrorAlert()
+            errAlert: closeErrorAlert(),
+            proxyInfo: {}
+        },
+        created() {
+            let _that = this
+            const params = new URLSearchParams(window.location.search)
+            let id = params.get('id')
+
+            // 获取该信息的数据
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getProxy",//url
+                data: {
+                    id: id
+                },
+                success: function (result) {
+                    if (result.code != 0) {
+                        return _that.errorModel(result.msg)
+                    }
+                    _that.proxyInfo = result.data
+                    console.log(result)
+                }
+            })
         },
         methods: {
+            // 图片上传操作
+            uploadImg() {
+                var preview = document.querySelector("img");
+                var file = document.querySelector("input[type=file]").files[0];
+                var reader = new FileReader();
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = '';
+                }
+
+                reader.onloadend = function () {
+                    let base = reader.result
+                    preview.src = base;
+                    $("#imgInput").attr("value", base)
+                }
+
+            },
             // 打开或关闭
             errorModel(errMsg) {
                 let _that = this
@@ -239,25 +327,36 @@
             },
             // 提交表单
             submitForm() {
+                // 获取表单数据
                 var form = $('#formAdd').serializeArray()
                 var obj = {};//给obj分配内存
                 for (var i = 0; i < form.length; i++) {
                     obj[form [i].name] = form [i]['value'];
                 }
+
+                // 获取id 值
+                const params = new URLSearchParams(window.location.search)
+                let id = params.get('id')
+                obj.id = id
+
+                // 删除空值
+                obj = preProcessData(obj)
+
+                console.log(obj)
                 let _that = this
                 $.ajax({
                     type: "POST",//方法类型
-                    url: "",//url
+                    url: "update",//url
                     data: obj,
                     success: function (result) {
+                        console.log(result)
                         if (result.code == 500) {
                             // 打开错误弹窗显示错误信息
                             return _that.errorModel(result.msg)
                         }
-                        sleep(1000).then(() => {
-                            alert("成功提交")
-                            window.location.href = "list"
-                        })
+
+                        alert("成功提交")
+                        window.location.href = "list"
                     },
                     error: function (err) {
                         // 打开错误弹窗显示错误信息

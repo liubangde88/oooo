@@ -149,22 +149,23 @@
 
                                     <!--功能-->
                                     <td>
-                                        <a class="btn btn-primary btn-sm " href="#" mce_href="#" title="编辑"
-                                           onclick="edit('160' , 0)"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-primary btn-sm" @click="edit(item.id)" mce_href="#"
+                                           title="编辑">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
                                         <a class="btn btn-warning btn-sm " href="#" title="拒绝" mce_href="#"
-                                           onclick="deny('160')"><i class="fa fa-remove"></i></a>
+                                           @click="del(item.id)"><i class="fa fa-remove"></i></a>
                                     </td>
                                 </tr>
-
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
+
         <div class="row">
             <div class="col-sm-7 col-sm-offset-5">
                 <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
@@ -286,6 +287,28 @@
 
         },
         methods: {
+            edit(id) {
+                window.location.href = "edit?id=" + id
+            },
+            del(id) {
+                // 获取数据
+                $.ajax({
+                    type: "POST",//方法类型
+                    url: "del",//url
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        if (result.code == 0) {
+                            // 打开错误弹窗显示错误信息
+                            alert("删除成功")
+                            sleep(1000).then(() => {
+                                location.reload();
+                            })
+                        }
+                    }
+                })
+            },
             // 下一页
             nextPage() {
                 if (this.currentPage === this.pageNum - 1) return;

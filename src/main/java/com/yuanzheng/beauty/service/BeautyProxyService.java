@@ -21,4 +21,6 @@ public interface BeautyProxyService {
     int updateByPrimaryKeySelective(BeautyProxyDo data);
 
     BeautyProxyDo selectByPrimaryKey(int proxyId);
+
+    int deleteByPrimaryKey(int id);
 }

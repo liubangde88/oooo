@@ -3,9 +3,11 @@ package com.yuanzheng.api;
 import com.yuanzheng.beauty.domain.AgentDo;
 import com.yuanzheng.beauty.domain.AgentWalletDo;
 import com.yuanzheng.beauty.domain.AgentWithDo;
+import com.yuanzheng.beauty.domain.WalletChargeDo;
 import com.yuanzheng.beauty.service.AgentService;
 import com.yuanzheng.beauty.service.AgentWalletService;
 import com.yuanzheng.beauty.service.AgentWithService;
+import com.yuanzheng.beauty.service.WalletChargeService;
 import com.yuanzheng.common.controller.BaseController;
 import com.yuanzheng.common.utils.MD5Utils;
 import com.yuanzheng.common.utils.R;
@@ -35,6 +37,10 @@ public class ApiWalletController extends BaseController {
 
     @Autowired
     private AgentWithService agentWithService;
+
+    @Autowired
+    private WalletChargeService walletChargeService;
+
 
     @GetMapping(value = "/getWallet")
     @ResponseBody
@@ -110,5 +116,18 @@ public class ApiWalletController extends BaseController {
 
         List<AgentWithDo> ls = agentWithService.getListWithdraw(param);
         return R.ok().put("ls", ls);
+    }
+
+    @PostMapping(value = "/getRechargeList")
+    @ResponseBody
+    @ApiOperation(value = "获取充值记录", httpMethod = "POST")
+    public R getRechargeList(@RequestParam Long agentId) {
+        System.out.println(agentId);
+        WalletChargeDo walletChargeDo = new WalletChargeDo();
+        walletChargeDo.setAgentId(agentId);
+
+        List<WalletChargeDo> list = walletChargeService.getList(walletChargeDo);
+
+        return R.ok().put("list", list);
     }
 }

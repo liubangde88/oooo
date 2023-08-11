@@ -51,4 +51,11 @@ public class WalletChargeServiceImpl implements WalletChargeService {
         return walletChargeDao.remove(id);
     }
 
+    @Override
+    public List<WalletChargeDo> getList(WalletChargeDo walletChargeDo) {
+        return walletChargeDao.getList(walletChargeDo);
+    }
+
+
+
 }

@@ -40,6 +40,14 @@
             <if test="nickName != null and nickName != ''">and nick_name LIKE '%${ nickName}%'</if>
         </where>
     </select>
+
+    <select id="getList" resultType="com.yuanzheng.beauty.domain.WalletChargeDo">
+        select *
+        from beauty_wallet_charge
+        where agent_id = #{agentId}
+        order by create_time desc
+    </select>
+
     <delete id="remove">
         delete
         from beauty_wallet_charge

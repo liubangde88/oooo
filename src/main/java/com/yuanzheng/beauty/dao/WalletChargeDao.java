@@ -19,4 +19,6 @@ public interface WalletChargeDao {
     int remove(Long id);
 
     WalletChargeDo get(Long id);
+
+    List<WalletChargeDo> getList(WalletChargeDo walletChargeDo);
 }

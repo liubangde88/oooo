@@ -335,14 +335,7 @@ public class ApiAgentController {
     }
 
 
-    @PostMapping(value = "/getRechargeList")
-    @ResponseBody
-    @ApiOperation(value = "获取充值记录", httpMethod = "POST")
-    public R getRechargeList(@RequestParam Long agentId) {
 
-
-        return R.ok();
-    }
 
 
 }

@@ -26,7 +26,7 @@ public class SendEmailUtil {
 
             // 设置邮件服务器主机名
 
-            props.setProperty("mail.host", "smtp.office365.com");
+            props.setProperty("mail.host", "smtp.gmail.com");
 
             // 发送邮件协议名称 这里使用的是smtp协议
 

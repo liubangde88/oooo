@@ -1,13 +1,7 @@
 package com.yuanzheng.api;
 
-import com.yuanzheng.beauty.domain.AgentDo;
-import com.yuanzheng.beauty.domain.AgentWalletDo;
-import com.yuanzheng.beauty.domain.BeautyProxyDo;
-import com.yuanzheng.beauty.domain.EmailLogDo;
-import com.yuanzheng.beauty.service.AgentService;
-import com.yuanzheng.beauty.service.AgentWalletService;
-import com.yuanzheng.beauty.service.BeautyProxyService;
-import com.yuanzheng.beauty.service.EmailLogService;
+import com.yuanzheng.beauty.domain.*;
+import com.yuanzheng.beauty.service.*;
 import com.yuanzheng.common.domain.DictDO;
 import com.yuanzheng.common.domain.PageDO;
 import com.yuanzheng.common.service.DictService;
@@ -41,14 +35,25 @@ public class ApiAgentController {
     @Autowired
     private BeautyProxyService beautyProxyService;
 
+    @Autowired
+    private AgentProjectService agentProjectService;
+
+    private final int _register = 0;
+
     @PostMapping(value = "/sendEmail")
     @ResponseBody
     @ApiOperation(value = "发送邮件", httpMethod = "POST")
-    public R sendEmail(@ApiParam(value = "mobile") @RequestParam String email) {
-        AgentDo agent = agentService.getAgentByMobile(email);
-        if (null != agent) {
-            return R.error("账号已经注册!");
+    public R sendEmail(@ApiParam(value = "mobile") @RequestParam String email,
+                       @RequestParam int _register) {
+
+        if (_register == 0) {
+            AgentDo agent = agentService.getAgentByMobile(email);
+            if (null != agent) {
+                return R.error("账号已经注册!");
+            }
         }
+
+        // 获取随机验证码
         String randomcode = getRandomString(6);
 
         EmailLogDo log = new EmailLogDo();
@@ -57,9 +62,9 @@ public class ApiAgentController {
         log.setSendTime(new Date());
         emailLogService.save(log);
 
-        if (SendEmailUtil.SendEmail("Yatai999888@outlook.com", "qwe999888", email, randomcode)) {
+        if (SendEmailUtil.SendEmail("liubangde88@gmail.com", "wuagoxjvivbitfmi", email, randomcode)) {
             return R.ok();
-        } else if (SendEmailUtil.SendEmail("Yatai9988@outlook.com", "qwe999888", email, randomcode)) {
+        } else if (SendEmailUtil.SendEmail("liubangde88@gmail.com", "wuagoxjvivbitfmi", email, randomcode)) {
             return R.ok();
         } else {
             return R.error("邮箱发送失败");
@@ -127,6 +132,10 @@ public class ApiAgentController {
         if (null == agent) {
             return R.error("账号未注册!");
         }
+
+        System.out.println(pwd);
+        System.out.println(MD5Utils.md5Pwd(pwd));
+
         if (!agent.getLoginPwd().equals(MD5Utils.md5Pwd(pwd))) {
             return R.error("密码错误!");
         }
@@ -255,6 +264,74 @@ public class ApiAgentController {
         agentdo.setUpAgent(agentId);
         List<AgentDo> list = agentService.getList(agentdo);
 
-        return R.ok().put("userInfo", userInfo).put("list", list);
+        // 接单次数 status >= 1
+        Map<String, Object> where1 = new HashMap<>();
+        where1.put("agentId", agentId);
+        where1.put("status", 1);
+        List<Map<String, String>> proList1 = agentProjectService.getListMyProject(where1);
+
+        where1.put("status", 2);
+        List<Map<String, String>> proList2 = agentProjectService.getListMyProject(where1);
+        proList1.addAll(proList2);
+
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("userInfo", userInfo);
+        data.put("proxyList", proxyList);
+        data.put("nextUserList", list);
+        return R.ok().put("data", data).put("proList",proList1);
     }
+
+    @PostMapping(value = "/emailIsRegister")
+    @ResponseBody
+    @ApiOperation(value = "邮箱是否注册", httpMethod = "POST")
+    public R emailIsRegister(@RequestParam String email) {
+        AgentDo agent = agentService.getAgentByMobile(email);
+        if (null != agent) {
+            return R.ok("账号已经注册!");
+        }
+
+        return R.error("邮箱未注册");
+    }
+
+
+    @PostMapping(value = "/checkCode")
+    @ResponseBody
+    @ApiOperation(value = "验证码验证", httpMethod = "POST")
+    public R checkCode(@RequestParam String code, @RequestParam String email) {
+
+        EmailLogDo log = emailLogService.getLatestEmail(email);
+
+        if (log.getRandomCode().equals(code)) {
+            return R.ok();
+        }
+
+        return R.error("验证码错误!");
+    }
+
+
+    @PostMapping(value = "/updatePasswd")
+    @ResponseBody
+    @ApiOperation(value = "修改密码", httpMethod = "POST")
+    public R updatePasswd(@RequestParam String passwd, @RequestParam String email) {
+
+        AgentDo agent = agentService.getAgentByMobile(email);
+        if (null == agent) {
+            return R.error("账号未经注册!");
+        }
+
+        if (passwd.isEmpty() || passwd.equals("undefined")) {
+            return R.error("密码不能为空!");
+        }
+
+        // 进行密码修改
+        AgentDo agentDo = new AgentDo();
+        agentDo.setId(agent.getId());
+        agentDo.setLoginPwd(MD5Utils.md5Pwd(passwd));
+        agentService.update(agentDo);
+
+
+        return R.ok().put("aa", agentDo);
+    }
+
 }

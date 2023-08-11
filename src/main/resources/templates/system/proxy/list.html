@@ -97,6 +97,7 @@
                                     <th>优惠折扣</th>
                                     <th>受保人数</th>
                                     <th>医保报销比例</th>
+                                    <th>封面图</th>
                                     <th>排序(由小到大)</th>
                                     <th>是否已启用</th>
                                     <th>新注册用户默认代理层级</th>
@@ -112,6 +113,9 @@
                                     <td>{{item.productOffers}} %</td>
                                     <td>{{item.peopleInsured}}</td>
                                     <td>{{item.mir}} %</td>
+                                    <td>
+                                        <img :src="item.img" alt="" style="width: 70px">
+                                    </td>
                                     <td>
                                         <input type="text" class="form-control form-control-lg yangshi"
                                                :placeholder="item.sore" @input="soreUpdate(item.id,$event)">

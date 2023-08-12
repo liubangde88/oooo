@@ -287,6 +287,7 @@ public class AgentDo implements Serializable {
     }
 
     public void setCardStatus(Integer cardStatus) {
+        System.out.println("cardStatus 设置的值为 : " + cardStatus);
         this.cardStatus = cardStatus;
     }
 }

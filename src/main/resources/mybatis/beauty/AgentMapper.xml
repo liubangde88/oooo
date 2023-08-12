@@ -30,26 +30,7 @@
 
     <select id="get"
             resultType="com.yuanzheng.beauty.domain.AgentDo">
-        select id,
-               up_agent,
-               agent_level,
-               nick_name,
-               head_img,
-               mobile,
-               login_pwd,
-               with_pwd,
-               with_type,
-               with_name,
-               with_man,
-               with_count,
-               with_address,
-               agent_status,
-               is_login,
-               cert_type,
-               cert_name,
-               cert_num,
-               create_time,
-               login_time
+        select *
         from beauty_agent
         where id = #{value}
     </select>
@@ -115,7 +96,7 @@
     </select>
 
     <!--查询当前用户下级-->
-    <select id="getList" resultType="com.yuanzheng.beauty.domain.AgentDo" resultMap="BaseResultMap">
+    <select id="getList" resultType="com.yuanzheng.beauty.domain.AgentDo">
         select *
         from beauty_agent
         where up_agent = #{upAgent}

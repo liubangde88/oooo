@@ -60,6 +60,12 @@ public class AgentDo implements Serializable {
 
     private Date loginTime;
 
+    private String cardFrontImg;
+
+    private String cardRsImg;
+
+    private Integer cardStatus;
+
 
     public Long getId() {
         return id;
@@ -260,4 +266,27 @@ public class AgentDo implements Serializable {
         this.certNum = certNum;
     }
 
+    public String getCardFrontImg() {
+        return cardFrontImg;
+    }
+
+    public void setCardFrontImg(String cardFrontImg) {
+        this.cardFrontImg = cardFrontImg;
+    }
+
+    public String getCardRsImg() {
+        return cardRsImg;
+    }
+
+    public void setCardRsImg(String cardRsImg) {
+        this.cardRsImg = cardRsImg;
+    }
+
+    public Integer getCardStatus() {
+        return cardStatus;
+    }
+
+    public void setCardStatus(Integer cardStatus) {
+        this.cardStatus = cardStatus;
+    }
 }

@@ -2,6 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yuanzheng.beauty.dao.AgentDao">
+    <resultMap id="BaseResultMap" type="com.yuanzheng.beauty.dao.AgentDao">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="up_agent" jdbcType="INTEGER" property="upAgent"/>
+        <result column="agent_level" jdbcType="VARCHAR" property="agentLevel"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="head_img" jdbcType="VARCHAR" property="headImg"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="login_pwd" jdbcType="VARCHAR" property="loginPwd"/>
+        <result column="with_pwd" jdbcType="VARCHAR" property="withPwd"/>
+        <result column="with_type" jdbcType="VARCHAR" property="withType"/>
+        <result column="with_name" jdbcType="VARCHAR" property="withName"/>
+        <result column="with_man" jdbcType="VARCHAR" property="withMan"/>
+        <result column="with_count" jdbcType="VARCHAR" property="withCount"/>
+        <result column="with_address" jdbcType="VARCHAR" property="withAddress"/>
+        <result column="agent_status" jdbcType="INTEGER" property="agentStatus"/>
+        <result column="is_login" jdbcType="INTEGER" property="isLogin"/>
+        <result column="cert_type" jdbcType="VARCHAR" property="certType"/>
+        <result column="cert_name" jdbcType="VARCHAR" property="certName"/>
+        <result column="cert_num" jdbcType="VARCHAR" property="certNum"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="card_front_img" jdbcType="VARCHAR" property="cardFrontImg"/>
+        <result column="card_rs_img" jdbcType="VARCHAR" property="cardRsImg"/>
+        <result column="card_status" jdbcType="INTEGER" property="cardStatus"/>
+    </resultMap>
 
     <select id="get"
             resultType="com.yuanzheng.beauty.domain.AgentDo">
@@ -85,31 +110,13 @@
 
 
     <select id="getAllCount" resultType="java.lang.Integer">
-        select count(*) from beauty_agent
+        select count(*)
+        from beauty_agent
     </select>
 
     <!--查询当前用户下级-->
-    <select id="getList" resultType="com.yuanzheng.beauty.domain.AgentDo">
-        select id,
-               up_agent,
-               agent_level,
-               nick_name,
-               head_img,
-               mobile,
-               login_pwd,
-               with_pwd,
-               with_type,
-               with_name,
-               with_man,
-               with_count,
-               with_address,
-               agent_status,
-               is_login,
-               cert_type,
-               cert_name,
-               cert_num,
-               create_time,
-               login_time
+    <select id="getList" resultType="com.yuanzheng.beauty.domain.AgentDo" resultMap="BaseResultMap">
+        select *
         from beauty_agent
         where up_agent = #{upAgent}
     </select>

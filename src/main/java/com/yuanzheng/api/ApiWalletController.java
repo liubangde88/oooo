@@ -131,6 +131,15 @@ public class ApiWalletController extends BaseController {
         return R.ok().put("list", list);
     }
 
+    @PostMapping(value = "/verifiedCard")
+    @ResponseBody
+    @ApiOperation(value = "实名认证", httpMethod = "POST")
+    public R verifiedCard(AgentDo agentDo) {
+        agentDo.setCardStatus(1); // 修改身份证件审核状态为待审核
+
+        agentService.update(agentDo); // 进行修改
+        return R.ok().put("list", agentDo);
+    }
 
 
 }

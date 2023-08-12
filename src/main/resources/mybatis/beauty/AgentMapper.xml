@@ -124,6 +124,9 @@
             <if test="certNum != null">cert_num = #{certNum},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="loginTime != null">login_time = #{loginTime},</if>
+            <if test="cardFrontImg != null">card_front_img = #{cardFrontImg},</if>
+            <if test="cardRsImg != null">card_rs_img = #{cardRsImg},</if>
+            <if test="cardStatus != null">card_status = #{cardStatus},</if>
         </set>
         where id = #{id}
     </update>

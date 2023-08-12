@@ -52,7 +52,7 @@
     </select>
     <select id="getListMyProject" resultType="map">
         select
-        ap.id,a.mobile,a.nick_name as nickName,p.name,p.content,p.price,p.agent_percent as
+        ap.id,a.mobile,a.nick_name as nickName,p.id as project_id, p.name,p.content,p.price,p.agent_percent as
         agentPercent,ap.status,ap.create_time as createTime
         from
         beauty_agent_project ap

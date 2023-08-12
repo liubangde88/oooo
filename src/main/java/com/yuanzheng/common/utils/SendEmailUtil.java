@@ -34,7 +34,7 @@ public class SendEmailUtil {
 
             // 服务端口号
 
-            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.port", "587"); // 465 , 587, 25
 
             props.put("mail.smtp.starttls.enable", "true");
 

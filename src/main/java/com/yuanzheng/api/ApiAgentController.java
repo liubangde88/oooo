@@ -1,14 +1,20 @@
 package com.yuanzheng.api;
 
-import com.yuanzheng.beauty.domain.*;
+import com.yuanzheng.beauty.domain.AgentDo;
+import com.yuanzheng.beauty.domain.AgentWalletDo;
+import com.yuanzheng.beauty.domain.BeautyProxyDo;
+import com.yuanzheng.beauty.domain.EmailLogDo;
 import com.yuanzheng.beauty.service.*;
 import com.yuanzheng.common.domain.DictDO;
-import com.yuanzheng.common.domain.PageDO;
 import com.yuanzheng.common.service.DictService;
-import com.yuanzheng.common.utils.*;
+import com.yuanzheng.common.utils.MD5Utils;
+import com.yuanzheng.common.utils.R;
+import com.yuanzheng.common.utils.SendEmailUtil;
+import com.yuanzheng.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -279,7 +285,7 @@ public class ApiAgentController {
         data.put("userInfo", userInfo);
         data.put("proxyList", proxyList);
         data.put("nextUserList", list);
-        return R.ok().put("data", data).put("proList",proList1);
+        return R.ok().put("data", data).put("proList", proList1);
     }
 
     @PostMapping(value = "/emailIsRegister")
@@ -313,7 +319,7 @@ public class ApiAgentController {
     @PostMapping(value = "/updatePasswd")
     @ResponseBody
     @ApiOperation(value = "修改密码", httpMethod = "POST")
-    public R updatePasswd(@RequestParam String passwd, @RequestParam String email) {
+    public R updatePasswd(@RequestParam String passwd, @RequestParam String email, @RequestParam int _register) {
 
         AgentDo agent = agentService.getAgentByMobile(email);
         if (null == agent) {
@@ -326,16 +332,16 @@ public class ApiAgentController {
 
         // 进行密码修改
         AgentDo agentDo = new AgentDo();
-        agentDo.setId(agent.getId());
-        agentDo.setLoginPwd(MD5Utils.md5Pwd(passwd));
+        if (_register == 0) {
+            agentDo.setLoginPwd(MD5Utils.md5Pwd(passwd));
+        } else {
+            agentDo.setWithPwd(MD5Utils.md5Pwd(passwd));
+        }
         agentService.update(agentDo);
 
 
         return R.ok().put("aa", agentDo);
     }
-
-
-
 
 
 }

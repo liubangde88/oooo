@@ -281,7 +281,6 @@ public class ApiAgentController {
         List<Map<String, String>> proList2 = agentProjectService.getListMyProject(where1);
         proList1.addAll(proList2);
 
-
         Map<String, Object> data = new HashMap<>();
         data.put("userInfo", userInfo);
         data.put("proxyList", proxyList);

@@ -268,6 +268,8 @@ public class ApiAgentController {
         // 获取当前用户有效下级会员人数
         AgentDo agentdo = new AgentDo();
         agentdo.setUpAgent(agentId);
+
+
         List<AgentDo> list = agentService.getList(agentdo);
 
         // 接单次数 status >= 1

@@ -269,7 +269,6 @@ public class ApiAgentController {
         AgentDo agentdo = new AgentDo();
         agentdo.setUpAgent(agentId);
 
-
         List<AgentDo> list = agentService.getList(agentdo);
 
         // 接单次数 status >= 1

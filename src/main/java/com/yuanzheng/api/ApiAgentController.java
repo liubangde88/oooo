@@ -50,7 +50,7 @@ public class ApiAgentController {
     @ResponseBody
     @ApiOperation(value = "发送邮件", httpMethod = "POST")
     public R sendEmail(@ApiParam(value = "mobile") @RequestParam String email,
-                       @RequestParam int _register) {
+                       @RequestParam(value = "_register", defaultValue = "0")  int _register) {
 
         if (_register == 0) {
             AgentDo agent = agentService.getAgentByMobile(email);

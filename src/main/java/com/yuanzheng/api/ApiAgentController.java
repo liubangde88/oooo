@@ -52,7 +52,6 @@ public class ApiAgentController {
     public R sendEmail(@ApiParam(value = "mobile") @RequestParam String email,
                        @RequestParam(value = "_register", defaultValue = "0")  int _register) {
 
-
         if (_register == 0) {
             AgentDo agent = agentService.getAgentByMobile(email);
             if (null != agent) {

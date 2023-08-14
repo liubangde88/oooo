@@ -44,7 +44,6 @@ public class ApiAgentController {
     @Autowired
     private AgentProjectService agentProjectService;
 
-    private final int _register = 0;
 
     @PostMapping(value = "/sendEmail")
     @ResponseBody
